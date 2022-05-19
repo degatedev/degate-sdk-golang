@@ -197,3 +197,7 @@ type OrdersResponse struct {
 	binance.Response
 	Data OrdersListData `json:"data"`
 }
+
+type CancelAllOrdersParam struct {
+	IncludeGrid bool `json:"includeGrid"`
+}

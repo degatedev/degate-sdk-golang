@@ -12,32 +12,31 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type Protocol interface {
-	HandlerMessage([]byte)
-	Stop()
-}
-
-type WebSocketProtocol struct {
-	Protocol
-	config *conf.AppConfig
-	conn   *websocket.Conn
-	// webSocketProtocol Protocol
-	subscribeMessages []*Msg
-	closeCh           *chan bool
-	isClose           bool
-	isDone            bool
-	url               string
-	retryNum          int
-}
-
 type Msg struct {
 	Method string   `json:"method"`
 	Params []string `json:"params"`
 	ID     int      `json:"id"`
 }
 
-func (c *WebSocketProtocol) Geturl() string {
-	return c.config.WebsocketBaseUrl + "ws"
+type Protocol interface {
+	Stop()
+}
+
+type WebSocketProtocol struct {
+	BaseUrl string
+	conn   *websocket.Conn
+	MessageProcess func(data []byte)
+	subscribeMessages []*Msg
+	closeCh           *chan bool
+	isClose           bool
+	isDone            bool
+	url               string
+	retryNum          int
+	Protocol
+}
+
+func (c *WebSocketProtocol) GetUrl() string {
+	return c.BaseUrl + "ws"
 }
 
 func (c *WebSocketProtocol) Connect() {
@@ -73,7 +72,7 @@ func (c *WebSocketProtocol) pong() {
 	go func() {
 		var failPong = 0
 		for {
-			time.Sleep(time.Second * time.Duration(conf.PongInterval))
+			time.Sleep(time.Second*time.Duration(conf.PongInterval))
 			if c.isClose || c.isDone {
 				return
 			}
@@ -91,7 +90,6 @@ func (c *WebSocketProtocol) pong() {
 				log.Error("pong fail num:%v  error:%v", failPong, err)
 			} else {
 				failPong = 0
-				log.Info("pong success")
 			}
 			if failPong >= 2 {
 				c.Close()
@@ -99,7 +97,6 @@ func (c *WebSocketProtocol) pong() {
 				return
 			}
 		}
-
 	}()
 }
 
@@ -131,8 +128,7 @@ func (c *WebSocketProtocol) reconnect() {
 				}
 				msg.E = "error"
 				cb, _ := json.Marshal(msg)
-				c.HandlerMessage(cb)
-				// c.webSocketProtocol.HandlerMessage(cb)
+				c.MessageProcess(cb)
 				return
 			}
 		}
@@ -194,16 +190,14 @@ func (c *WebSocketProtocol) readMessage() {
 						}
 						msg.E = "error"
 						cb, _ := json.Marshal(msg)
-						c.HandlerMessage(cb)
-						// c.webSocketProtocol.HandlerMessage(cb)
+						c.MessageProcess(cb)
 						return
 					}
 					continue
 				}
 				if len(message) > 0 {
 					log.Info("websocket ReadMessage message:%v", string(message))
-					// c.webSocketProtocol.HandlerMessage(message)
-					c.HandlerMessage(message)
+					c.MessageProcess(message)
 				}
 			}
 		}
@@ -229,7 +223,7 @@ func (c *WebSocketProtocol) UnSubscribe(params []string, id int) (err error) {
 }
 
 func (c *WebSocketProtocol) Subscribe(params []string, id int) {
-	c.url = c.Geturl()
+	c.url = c.GetUrl()
 	msg := &Msg{
 		Method: "SUBSCRIBE",
 		Params: params,
@@ -241,7 +235,7 @@ func (c *WebSocketProtocol) Subscribe(params []string, id int) {
 }
 
 func (c *WebSocketProtocol) SubscribeUser(listenKey string) {
-	c.url = c.Geturl() + "/" + listenKey
+	c.url = c.GetUrl() + "/" + listenKey
 	c.Connect()
 }
 

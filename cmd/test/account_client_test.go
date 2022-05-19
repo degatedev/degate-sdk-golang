@@ -143,10 +143,12 @@ func TestGetDeposits(t *testing.T) {
 		Coin:  "ETH",
 		Limit: 10,
 	})
+
 	if err != nil {
 		log.Error("error DepositHistory: %v", err)
 		return
 	}
+
 	if response.Success() {
 		log.Print("DepositHistory success\n %v", lib.String(response.Data))
 	} else {

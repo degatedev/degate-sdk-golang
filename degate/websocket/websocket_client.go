@@ -20,16 +20,13 @@ const (
 	TickerStreamName      = "%d.%d@ticker"
 	BookTickerStreamName  = "%d.%d@bookTicker"
 	DepthStreamName       = "%d.%d@depth%d%s"
-	DepthHandleName       = "%d.%d@depth"
 	DepthUpdateStreamName = "%d.%d@depthUpdate%s"
-	DepthUpdateHandleName = "%d.%d@depthUpdate"
-	UserDataHandleName    = "%s@ListenKey"
 )
 
 type WebSocketClient struct {
-	WebSocketProtocol
-	//handlers map[string]*websocket.Conn
+	config *conf.AppConfig
 	handler func(string)
+	WebSocketProtocol
 }
 
 func (c *WebSocketClient) Init(config *conf.AppConfig) {
@@ -42,6 +39,8 @@ func (c *WebSocketClient) Init(config *conf.AppConfig) {
 		conf.Conf = new(conf.Config).Init()
 	}
 	conf.Conf.AddTokens(config.Tokens)
+	c.BaseUrl = c.config.WebsocketBaseUrl
+	c.MessageProcess = c.HandlerMessage
 	SaveClient(c)
 }
 

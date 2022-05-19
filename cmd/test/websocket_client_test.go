@@ -21,12 +21,10 @@ func TestKlineWebscoket(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	c := &websocket.WebSocketClient{}
 	c.Init(appConfig)
@@ -70,12 +68,10 @@ func TestTickerWebscoket(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	c := websocket.WebSocketClient{}
 	c.Init(appConfig)
@@ -94,12 +90,10 @@ func TestBookTickerWebscoket(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	c := websocket.WebSocketClient{}
 	c.Init(appConfig)
@@ -118,12 +112,10 @@ func TestDepthWebscoket(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	c := websocket.WebSocketClient{}
 	c.Init(appConfig)

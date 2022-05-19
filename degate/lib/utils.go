@@ -37,6 +37,14 @@ func GetAmount(volume string, decimals int32, decimalDigits int) (amount string,
 	return
 }
 
+func ParseParam(p string, obj interface{}) (err error) {
+	err = json.Unmarshal([]byte(p), obj)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func FormatTime(t int64) string {
 	if t == 0 {
 		return ""

@@ -702,6 +702,11 @@ func (c *Client) GetDeposits(param *model.DepositsParam) (response *binance.Depo
 	if err != nil {
 		return
 	}
+
+	if param.Limit <= 0 {
+		param.Limit = conf.Limit
+	}
+
 	r := &model.DGDepositsParam{
 		AccountId: int64(c.AppConfig.AccountId),
 		Tokens:    tokenIds,
