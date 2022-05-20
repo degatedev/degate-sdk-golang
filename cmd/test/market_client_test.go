@@ -29,12 +29,10 @@ func TestTrades(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)

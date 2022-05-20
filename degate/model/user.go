@@ -64,6 +64,7 @@ type TradeData struct {
 	CreateTime        int64          `json:"create_time"`
 	FillAmountBors    bool           `json:"fill_amount_bors"`
 	IsBuy             bool           `json:"is_buy"`
+	Price string `json:"price"`
 }
 
 type TransferData struct {

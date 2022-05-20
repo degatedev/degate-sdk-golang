@@ -2,6 +2,7 @@ package lib
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/degatedev/degatesdk/conf"
@@ -28,7 +29,7 @@ func ConvertOrder(o *model.OrderList) (order *binance.Order) {
 	}
 	var (
 		pow10 = decimal.NewFromInt(10)
-		zero  = decimal.NewFromInt(0)
+		//zero  = decimal.NewFromInt(0)
 	)
 	order = &binance.Order{}
 	order.Symbol = o.GetSymbol()
@@ -75,7 +76,7 @@ func ConvertOrder(o *model.OrderList) (order *binance.Order) {
 	} else {
 		order.Status = ""
 	}
-
+	order.Price = o.Price
 	filledBuyTokenVolume := o.FilledBuyTokenVolume
 	if len(filledBuyTokenVolume) == 0 {
 		filledBuyTokenVolume = "0"
@@ -93,13 +94,13 @@ func ConvertOrder(o *model.OrderList) (order *binance.Order) {
 		v, _ = decimal.NewFromString(o.SellToken.Volume)
 		order.OrigQuoteOrderQty = v.DivRound(pow10.Pow(decimal.NewFromInt32(o.SellToken.Decimals)), 32).String()
 		order.CummulativeQuoteQty = filledSellTokenDec.DivRound(pow10.Pow(decimal.NewFromInt32(o.SellToken.Decimals)), 32).String()
-		if o.OrderType == 1 {
-			if filledBuyTokenDec.GreaterThan(zero) {
-				order.Price = util.CalculatePrice(filledSellTokenVolume, filledBuyTokenVolume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(o.BuyToken.Decimals-o.SellToken.Decimals))).String()
-			}
-		} else {
-			order.Price = util.CalculatePrice(o.SellToken.Volume, o.BuyToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(o.BuyToken.Decimals-o.SellToken.Decimals))).String()
-		}
+		//if o.OrderType == 1 {
+		//	if filledBuyTokenDec.GreaterThan(zero) {
+		//		order.Price = util.CalculatePrice(filledSellTokenVolume, filledBuyTokenVolume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(o.BuyToken.Decimals-o.SellToken.Decimals))).String()
+		//	}
+		//} else {
+		//	order.Price = util.CalculatePrice(o.SellToken.Volume, o.BuyToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(o.BuyToken.Decimals-o.SellToken.Decimals))).String()
+		//}
 	} else {
 		v, _ := decimal.NewFromString(o.SellToken.Volume)
 		order.OrigQty = v.DivRound(pow10.Pow(decimal.NewFromInt32(o.SellToken.Decimals)), 32).String()
@@ -107,13 +108,13 @@ func ConvertOrder(o *model.OrderList) (order *binance.Order) {
 		v, _ = decimal.NewFromString(o.BuyToken.Volume)
 		order.OrigQuoteOrderQty = v.DivRound(pow10.Pow(decimal.NewFromInt32(o.BuyToken.Decimals)), 32).String()
 		order.CummulativeQuoteQty = filledBuyTokenDec.DivRound(pow10.Pow(decimal.NewFromInt32(o.BuyToken.Decimals)), 32).String()
-		if o.OrderType == 1 {
-			if filledSellTokenDec.GreaterThan(zero) {
-				order.Price = util.CalculatePrice(filledBuyTokenVolume, filledSellTokenVolume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(o.SellToken.Decimals-o.BuyToken.Decimals))).String()
-			}
-		} else {
-			order.Price = util.CalculatePrice(o.BuyToken.Volume, o.SellToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(o.SellToken.Decimals-o.BuyToken.Decimals))).String()
-		}
+		//if o.OrderType == 1 {
+		//	if filledSellTokenDec.GreaterThan(zero) {
+		//		order.Price = util.CalculatePrice(filledBuyTokenVolume, filledSellTokenVolume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(o.SellToken.Decimals-o.BuyToken.Decimals))).String()
+		//	}
+		//} else {
+		//	order.Price = util.CalculatePrice(o.BuyToken.Volume, o.SellToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(o.SellToken.Decimals-o.BuyToken.Decimals))).String()
+		//}
 	}
 	return order
 }
@@ -167,17 +168,11 @@ func ConvertWithdraw(w *model.WithdrawalData) (withdraw *binance.WithdrawHistory
 	}
 	if w.Token != nil {
 		withdraw.Coin = w.Token.Symbol
-		withdraw.Amount, err = GetAmount(w.Token.Volume, w.Token.Decimals, conf.EffectiveDecimal)
-		if err != nil {
-			return
-		}
+		withdraw.Amount = GetAmountNew(w.Token.Volume, w.Token.Decimals)
 	}
 	if w.FeeToken != nil {
 		withdraw.TransactionFeeCoin = w.FeeToken.Symbol
-		withdraw.TransactionFee, err = GetAmount(w.FeeToken.Volume, w.FeeToken.Decimals, conf.EffectiveDecimal)
-		if err != nil {
-			return
-		}
+		withdraw.TransactionFee= GetAmountNew(w.FeeToken.Volume, w.FeeToken.Decimals)
 	}
 	return
 }
@@ -217,10 +212,7 @@ func ConvertDeposit(w *model.DepositData) (deposit *binance.DepositHistory, err 
 	}
 	if w.Token != nil {
 		deposit.Coin = w.Token.Symbol
-		deposit.Amount, err = GetAmount(w.Token.Volume, w.Token.Decimals, conf.EffectiveDecimal)
-		if err != nil {
-			return
-		}
+		deposit.Amount = GetAmountNew(w.Token.Volume, w.Token.Decimals)
 	}
 	return
 }
@@ -291,9 +283,7 @@ func ConvertBalances(bs []*model.Balances) (balances []*binance.Balance, err err
 			if b.Token != nil {
 				bb.Asset = b.Token.Symbol
 			}
-			if bb.Free, err = GetAmount(b.Balance, b.Token.Decimals, conf.EffectiveDecimal); err != nil {
-				return
-			}
+			bb.Free = GetAmountNew(b.Balance, b.Token.Decimals)
 			if dL, err = decimal.NewFromString(b.FrozenDepositBalance); err != nil {
 				return
 			}
@@ -303,9 +293,7 @@ func ConvertBalances(bs []*model.Balances) (balances []*binance.Balance, err err
 			if oL, err = decimal.NewFromString(b.FrozenOrderBalance); err != nil {
 				return
 			}
-			if bb.Freeze, err = GetAmount(dL.Add(wL).Add(oL).String(), b.Token.Decimals, conf.EffectiveDecimal); err != nil {
-				return
-			}
+			bb.Freeze = GetAmountNew(dL.Add(wL).Add(oL).String(), b.Token.Decimals)
 			balances = append(balances, bb)
 		}
 	}
@@ -315,6 +303,7 @@ func ConvertBalances(bs []*model.Balances) (balances []*binance.Balance, err err
 func ConvertTrades(trades []*model.TradeData) (bTrades []*binance.Trade, err error) {
 	var bt *binance.Trade
 	for _, t := range trades {
+		fmt.Println(*t, *t.FilledSellToken, *t.FilledBuyToken)
 		if t != nil {
 			if bt, err = ConvertTrade(t); err == nil && bt != nil {
 				bTrades = append(bTrades, bt)
@@ -335,38 +324,28 @@ func ConvertTrade(t *model.TradeData) (trade *binance.Trade, err error) {
 	trade.TradeId = t.TradeId
 	trade.OrderId = t.OrderId
 	trade.OrderListId = -1
+	trade.Price = t.Price
 	if t.IsBuy {
 		trade.BaseTokenId = uint32(t.FilledBuyToken.TokenID)
 		trade.QuoteTokenId = uint32(t.FilledSellToken.TokenID)
-		trade.Price = util.CalculatePrice(t.FilledSellToken.Volume, t.FilledBuyToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(t.FilledBuyToken.Decimals-t.FilledSellToken.Decimals))).String()
-		if trade.Qty, err = GetAmount(t.FilledBuyToken.Volume, t.FilledBuyToken.Decimals, conf.EffectiveDecimal); err != nil {
-			return
-		}
-		if trade.QuoteQty, err = GetAmount(t.FilledSellToken.Volume, t.FilledSellToken.Decimals, conf.EffectiveDecimal); err != nil {
-			return
-		}
+		//trade.Price = util.CalculatePrice(t.FilledSellToken.Volume, t.FilledBuyToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(t.FilledBuyToken.Decimals-t.FilledSellToken.Decimals))).String()
+		trade.Qty = GetAmountNew(t.FilledBuyToken.Volume, t.FilledBuyToken.Decimals)
+		trade.QuoteQty = GetAmountNew(t.FilledSellToken.Volume, t.FilledSellToken.Decimals)
 	} else {
 		trade.BaseTokenId = uint32(t.FilledSellToken.TokenID)
 		trade.QuoteTokenId = uint32(t.FilledBuyToken.TokenID)
-		trade.Price = util.CalculatePrice(t.FilledBuyToken.Volume, t.FilledSellToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(t.FilledSellToken.Decimals-t.FilledBuyToken.Decimals))).String()
-		if trade.Qty, err = GetAmount(t.FilledSellToken.Volume, t.FilledSellToken.Decimals, conf.EffectiveDecimal); err != nil {
-			return
-		}
-		if trade.QuoteQty, err = GetAmount(t.FilledBuyToken.Volume, t.FilledBuyToken.Decimals, conf.EffectiveDecimal); err != nil {
-			return
-		}
+		//trade.Price = util.CalculatePrice(t.FilledBuyToken.Volume, t.FilledSellToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(t.FilledSellToken.Decimals-t.FilledBuyToken.Decimals))).String()
+		trade.Qty = GetAmountNew(t.FilledSellToken.Volume, t.FilledSellToken.Decimals)
+		trade.QuoteQty = GetAmountNew(t.FilledBuyToken.Volume, t.FilledBuyToken.Decimals)
 	}
-
-	if trade.Commission, err = GetAmount(t.FilledGasFeeToken.Volume, t.FilledGasFeeToken.Decimals, conf.EffectiveDecimal); err != nil {
-		return
-	}
+	trade.Commission = GetAmountNew(t.FilledGasFeeToken.Volume, t.FilledGasFeeToken.Decimals)
 	trade.CommissionAsset = t.FilledGasFeeToken.Symbol
 	trade.IsMaker = t.IsMaker
 	trade.IsBuyer = t.IsBuy
 	// create time is the order's tradetime
 	trade.Time = t.CreateTime
-	trade.GasFee, _ = GetAmount(t.FilledGasFeeToken.Volume, t.FilledGasFeeToken.Decimals, conf.EffectiveDecimal)
-	trade.TradeFee, _ = GetAmount(t.FilledFeeToken.Volume, t.FilledFeeToken.Decimals, conf.EffectiveDecimal)
+	trade.GasFee = GetAmountNew(t.FilledGasFeeToken.Volume, t.FilledGasFeeToken.Decimals)
+	trade.TradeFee = GetAmountNew(t.FilledFeeToken.Volume, t.FilledFeeToken.Decimals)
 	trade.AccountId = uint64(t.AccountID)
 	return
 }
@@ -389,22 +368,17 @@ func ConvertTradeHistory(t *model.TradeData) (trade *binance.TradeHistory, err e
 	}
 	trade = &binance.TradeHistory{}
 	trade.Id = t.ID
+	//trade.OrderId = t.OrderId
+	//trade.OrderListId = -1
+	trade.Price = t.Price
 	if t.IsBuy {
-		trade.Price = util.CalculatePrice(t.FilledSellToken.Volume, t.FilledBuyToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(t.FilledBuyToken.Decimals-t.FilledSellToken.Decimals))).String()
-		if trade.Qty, err = GetAmount(t.FilledBuyToken.Volume, t.FilledBuyToken.Decimals, conf.EffectiveDecimal); err != nil {
-			return
-		}
-		if trade.QuoteQty, err = GetAmount(t.FilledSellToken.Volume, t.FilledSellToken.Decimals, conf.EffectiveDecimal); err != nil {
-			return
-		}
+		//trade.Price = util.CalculatePrice(t.FilledSellToken.Volume, t.FilledBuyToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(t.FilledBuyToken.Decimals-t.FilledSellToken.Decimals))).String()
+		trade.Qty = GetAmountNew(t.FilledBuyToken.Volume, t.FilledBuyToken.Decimals)
+		trade.QuoteQty = GetAmountNew(t.FilledSellToken.Volume, t.FilledSellToken.Decimals)
 	} else {
-		trade.Price = util.CalculatePrice(t.FilledBuyToken.Volume, t.FilledSellToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(t.FilledSellToken.Decimals-t.FilledBuyToken.Decimals))).String()
-		if trade.Qty, err = GetAmount(t.FilledSellToken.Volume, t.FilledSellToken.Decimals, conf.EffectiveDecimal); err != nil {
-			return
-		}
-		if trade.QuoteQty, err = GetAmount(t.FilledBuyToken.Volume, t.FilledBuyToken.Decimals, conf.EffectiveDecimal); err != nil {
-			return
-		}
+		//trade.Price = util.CalculatePrice(t.FilledBuyToken.Volume, t.FilledSellToken.Volume, decimal.NewFromInt(10).Pow(decimal.NewFromInt32(t.FilledSellToken.Decimals-t.FilledBuyToken.Decimals))).String()
+		trade.Qty = GetAmountNew(t.FilledSellToken.Volume, t.FilledSellToken.Decimals)
+		trade.QuoteQty = GetAmountNew(t.FilledBuyToken.Volume, t.FilledBuyToken.Decimals)
 	}
 	if t.IsBuy && t.IsMaker {
 		trade.IsBuyerMaker = true

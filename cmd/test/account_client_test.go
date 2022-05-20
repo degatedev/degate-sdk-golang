@@ -204,12 +204,10 @@ func TestGetMyTrades(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
@@ -223,7 +221,7 @@ func TestGetMyTrades(t *testing.T) {
 		return
 	}
 	if response.Success() {
-		log.Print("MyTrades success: %v", lib.String(response.Data))
+		log.Error("MyTrades success:\n %v", lib.String(response.Data))
 	} else {
 		log.Print("MyTrades fail: %v", lib.String(response))
 	}
@@ -250,18 +248,18 @@ func TestGetAllOrders(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
 	r, err := c.GetAllOrders(&model.OrdersParam{
 		Symbol: "ETHUSDC",
 		Limit:  20,
+		StartTime: 0,
+		//EndTime:   1637683200,
 	})
 	if err != nil {
 		log.Print("AllOrders error: %v", err)

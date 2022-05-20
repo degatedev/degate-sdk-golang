@@ -23,25 +23,13 @@ func String(o interface{}) string {
 	return string(b)
 }
 
-func GetAmount(volume string, decimals int32, decimalDigits int) (amount string, err error) {
+func GetAmountNew(volume string, decimals int32) (amount string) {
 	q, err := decimal.NewFromString(volume)
 	if err != nil {
+		log.Error("GetAmountNew error:%v",err)
 		return
 	}
-	a := q.DivRound(decimal.NewFromInt(10).Pow(decimal.NewFromInt(int64(decimals))), 32)
-	if decimalDigits >= 0 {
-		amount = a.Truncate(int32(decimalDigits)).StringFixed(int32(decimalDigits))
-	} else {
-		amount = a.String()
-	}
-	return
-}
-
-func ParseParam(p string, obj interface{}) (err error) {
-	err = json.Unmarshal([]byte(p), obj)
-	if err != nil {
-		return
-	}
+	amount = q.DivRound(decimal.NewFromInt(10).Pow(decimal.NewFromInt(int64(decimals))), 32).String()
 	return
 }
 
@@ -60,6 +48,14 @@ func GetSymbol(buyToken *model.ShowTokenData, sellToken *model.ShowTokenData, is
 		symbol = strings.ToUpper(buyToken.Symbol) + strings.ToUpper(sellToken.Symbol)
 	} else {
 		symbol = strings.ToUpper(sellToken.Symbol) + strings.ToUpper(buyToken.Symbol)
+	}
+	return
+}
+
+func ParseParam(p string, obj interface{}) (err error) {
+	err = json.Unmarshal([]byte(p), obj)
+	if err != nil {
+		return
 	}
 	return
 }
