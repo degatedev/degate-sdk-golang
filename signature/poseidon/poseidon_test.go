@@ -5,7 +5,7 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/degatedev/degatesdk/signature/utils"
+	"github.com/degatedev/degate-sdk-golang/signature/utils"
 
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/crypto/blake2b"

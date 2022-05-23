@@ -4,9 +4,9 @@ import (
 	"errors"
 	"math/big"
 
-	_constants "github.com/degatedev/degatesdk/signature/constants"
-	"github.com/degatedev/degatesdk/signature/ff"
-	"github.com/degatedev/degatesdk/signature/utils"
+	_constants "github.com/degatedev/degate-sdk-golang/signature/constants"
+	"github.com/degatedev/degate-sdk-golang/signature/ff"
+	"github.com/degatedev/degate-sdk-golang/signature/utils"
 	"github.com/ethereum/go-ethereum/crypto"
 )
 

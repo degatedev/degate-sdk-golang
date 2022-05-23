@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/degatedev/degatesdk/degate/model"
-	"github.com/degatedev/degatesdk/log"
+	"github.com/degatedev/degate-sdk-golang/degate/model"
+	"github.com/degatedev/degate-sdk-golang/log"
 	"github.com/shopspring/decimal"
 )
 

@@ -3,7 +3,7 @@ package log
 import (
 	"fmt"
 
-	"github.com/degatedev/degatesdk/conf"
+	"github.com/degatedev/degate-sdk-golang/conf"
 )
 
 func Print(format string, args ...interface{}) {

@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/degatedev/degatesdk/conf"
+	"github.com/degatedev/degate-sdk-golang/conf"
 
 	"github.com/shopspring/decimal"
 )

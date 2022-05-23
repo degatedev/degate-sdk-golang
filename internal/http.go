@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/degatedev/degatesdk/log"
+	"github.com/degatedev/degate-sdk-golang/log"
 	"github.com/shopspring/decimal"
 )
 

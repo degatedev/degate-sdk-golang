@@ -7,11 +7,11 @@ import (
 	"math/big"
 	"strconv"
 
-	"github.com/degatedev/degatesdk/degate/model"
-	"github.com/degatedev/degatesdk/degate/request"
-	"github.com/degatedev/degatesdk/log"
-	"github.com/degatedev/degatesdk/signature"
-	goSha3 "github.com/degatedev/degatesdk/signature/go-sha3"
+	"github.com/degatedev/degate-sdk-golang/degate/model"
+	"github.com/degatedev/degate-sdk-golang/degate/request"
+	"github.com/degatedev/degate-sdk-golang/log"
+	"github.com/degatedev/degate-sdk-golang/signature"
+	goSha3 "github.com/degatedev/degate-sdk-golang/signature/go-sha3"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"

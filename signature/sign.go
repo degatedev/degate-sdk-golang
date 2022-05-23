@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/degatedev/degatesdk/signature/babyjub"
-	"github.com/degatedev/degatesdk/signature/poseidon"
-	"github.com/degatedev/degatesdk/signature/utils"
+	"github.com/degatedev/degate-sdk-golang/signature/babyjub"
+	"github.com/degatedev/degate-sdk-golang/signature/poseidon"
+	"github.com/degatedev/degate-sdk-golang/signature/utils"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	crypto2 "github.com/ethereum/go-ethereum/crypto"

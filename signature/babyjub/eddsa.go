@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/degatedev/degatesdk/signature/mimc7"
-	"github.com/degatedev/degatesdk/signature/poseidon"
-	"github.com/degatedev/degatesdk/signature/utils"
+	"github.com/degatedev/degate-sdk-golang/signature/mimc7"
+	"github.com/degatedev/degate-sdk-golang/signature/poseidon"
+	"github.com/degatedev/degate-sdk-golang/signature/utils"
 )
 
 // pruneBuffer prunes the buffer during key generation according to RFC 8032.

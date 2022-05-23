@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/degatedev/degatesdk/conf"
-	"github.com/degatedev/degatesdk/degate/binance"
-	"github.com/degatedev/degatesdk/log"
+	"github.com/degatedev/degate-sdk-golang/conf"
+	"github.com/degatedev/degate-sdk-golang/degate/binance"
+	"github.com/degatedev/degate-sdk-golang/log"
 	"github.com/gorilla/websocket"
 )
 

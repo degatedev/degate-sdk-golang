@@ -1,6 +1,6 @@
 package model
 
-import "github.com/degatedev/degatesdk/degate/binance"
+import "github.com/degatedev/degate-sdk-golang/degate/binance"
 
 type PairInfoResponse struct {
 	binance.Response

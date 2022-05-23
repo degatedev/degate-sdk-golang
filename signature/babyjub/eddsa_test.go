@@ -8,8 +8,8 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/degatedev/degatesdk/signature/constants"
-	"github.com/degatedev/degatesdk/signature/utils"
+	"github.com/degatedev/degate-sdk-golang/signature/constants"
+	"github.com/degatedev/degate-sdk-golang/signature/utils"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

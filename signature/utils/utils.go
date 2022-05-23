@@ -7,8 +7,8 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/degatedev/degatesdk/signature/constants"
-	"github.com/degatedev/degatesdk/signature/ff"
+	"github.com/degatedev/degate-sdk-golang/signature/constants"
+	"github.com/degatedev/degate-sdk-golang/signature/ff"
 )
 
 // NewIntFromString creates a new big.Int from a decimal integer encoded as a

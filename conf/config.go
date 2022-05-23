@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/degatedev/degatesdk/degate/model"
+	"github.com/degatedev/degate-sdk-golang/degate/model"
 )
 
 var (

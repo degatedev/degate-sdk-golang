@@ -1,8 +1,8 @@
 package poseidon
 
 import (
-	"github.com/degatedev/degatesdk/signature/ff"
-	"github.com/degatedev/degatesdk/signature/utils"
+	"github.com/degatedev/degate-sdk-golang/signature/ff"
+	"github.com/degatedev/degate-sdk-golang/signature/utils"
 	"math/big"
 )
 

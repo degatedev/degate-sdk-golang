@@ -3,7 +3,7 @@ package poseidon
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/degatedev/degatesdk/signature/ff"
+	"github.com/degatedev/degate-sdk-golang/signature/ff"
 	"math/big"
 )
 

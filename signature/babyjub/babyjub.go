@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/degatedev/degatesdk/signature/constants"
-	"github.com/degatedev/degatesdk/signature/ff"
-	"github.com/degatedev/degatesdk/signature/utils"
+	"github.com/degatedev/degate-sdk-golang/signature/constants"
+	"github.com/degatedev/degate-sdk-golang/signature/ff"
+	"github.com/degatedev/degate-sdk-golang/signature/utils"
 )
 
 // A is one of the babyjub constants.

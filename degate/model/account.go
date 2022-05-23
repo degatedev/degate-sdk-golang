@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/degatedev/degatesdk/degate/binance"
+	"github.com/degatedev/degate-sdk-golang/degate/binance"
 )
 
 type TradeFeeParam struct {

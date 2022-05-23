@@ -1,6 +1,6 @@
 package test
 
-import "github.com/degatedev/degatesdk/conf"
+import "github.com/degatedev/degate-sdk-golang/conf"
 
 var appConfig = &conf.AppConfig{
 	AccountId:      0,

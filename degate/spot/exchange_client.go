@@ -3,12 +3,12 @@ package spot
 import (
 	"fmt"
 
-	"github.com/degatedev/degatesdk/conf"
-	"github.com/degatedev/degatesdk/degate/request"
+	"github.com/degatedev/degate-sdk-golang/conf"
+	"github.com/degatedev/degate-sdk-golang/degate/request"
 
-	"github.com/degatedev/degatesdk/degate/binance"
-	"github.com/degatedev/degatesdk/degate/lib"
-	"github.com/degatedev/degatesdk/degate/model"
+	"github.com/degatedev/degate-sdk-golang/degate/binance"
+	"github.com/degatedev/degate-sdk-golang/degate/lib"
+	"github.com/degatedev/degate-sdk-golang/degate/model"
 )
 
 func (c *Client) GetGasFee() (response *binance.GasFeeResponse, err error) {

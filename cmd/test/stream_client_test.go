@@ -3,10 +3,10 @@ package test
 import (
 	"testing"
 
-	"github.com/degatedev/degatesdk/degate/lib"
-	"github.com/degatedev/degatesdk/degate/model"
-	"github.com/degatedev/degatesdk/degate/spot"
-	"github.com/degatedev/degatesdk/log"
+	"github.com/degatedev/degate-sdk-golang/degate/lib"
+	"github.com/degatedev/degate-sdk-golang/degate/model"
+	"github.com/degatedev/degate-sdk-golang/degate/spot"
+	"github.com/degatedev/degate-sdk-golang/log"
 )
 
 func TestNewListenerKey(t *testing.T) {

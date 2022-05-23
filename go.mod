@@ -1,4 +1,4 @@
-module github.com/degatedev/degatesdk
+module github.com/degatedev/degate-sdk-golang
 
 go 1.15
 

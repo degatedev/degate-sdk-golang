@@ -1,14 +1,14 @@
 package test
 
 import (
-	"github.com/degatedev/degatesdk/conf"
+	"github.com/degatedev/degate-sdk-golang/conf"
 	"testing"
 	"time"
 
-	"github.com/degatedev/degatesdk/degate/model"
-	"github.com/degatedev/degatesdk/degate/spot"
-	"github.com/degatedev/degatesdk/degate/websocket"
-	"github.com/degatedev/degatesdk/log"
+	"github.com/degatedev/degate-sdk-golang/degate/model"
+	"github.com/degatedev/degate-sdk-golang/degate/spot"
+	"github.com/degatedev/degate-sdk-golang/degate/websocket"
+	"github.com/degatedev/degate-sdk-golang/log"
 )
 
 func sleep() {
