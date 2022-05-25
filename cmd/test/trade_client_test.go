@@ -14,20 +14,18 @@ func TestNewOrder(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
 	r, err := c.NewOrder(&model.OrderParam{
 		Symbol:   "ETHUSDC",
 		Side:     "SELL",
-		Quantity: 1,
-		Price:    2290,
+		Quantity: 0.1,
+		Price:    5000,
 		Type:     model.OrderTypeLimit,
 	})
 	if err != nil {

@@ -227,24 +227,32 @@ func (c *Client) GetAccount() (response *binance.AccountResponse, err error) {
 	if !response.Success() {
 		return
 	}
-	balance, err := c.GetBalance(&model.AccountBalanceParam{
-		Asset: "",
-	})
-	if err != nil {
+	if account.Data == nil {
 		return
 	}
-
-	if err = model.Copy(response, &balance.Response); err != nil {
-		return
-	}
-	if !response.Success() {
-		return
+	c.AppConfig.AccountId = account.Data.ID
+	var balance *binance.BalanceResponse
+	if account.Data.ID > 0 {
+		balance, err = c.GetBalance(&model.AccountBalanceParam{
+			Asset: "",
+		})
+		if err != nil {
+			return
+		}
+		if err = model.Copy(response, &balance.Response); err != nil {
+			return
+		}
+		if !response.Success() {
+			return
+		}
 	}
 	response.Data, err = lib.ConvertAccount(account.Data)
 	if err != nil {
 		return
 	}
-	response.Data.Balances = balance.Data
+	if balance != nil {
+		response.Data.Balances = balance.Data
+	}
 	return
 }
 

@@ -3,7 +3,6 @@ package test
 import (
 	"github.com/degatedev/degate-sdk-golang/conf"
 	"github.com/degatedev/degate-sdk-golang/degate/request"
-	// dm "degate-backend/order-book-api/model"
 	"testing"
 	"time"
 
