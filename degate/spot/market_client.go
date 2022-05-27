@@ -12,8 +12,8 @@ import (
 	"github.com/degatedev/degate-sdk-golang/log"
 )
 
-func (c *Client) Ping() (response *binance.TimeResponse, err error) {
-	response = &binance.TimeResponse{}
+func (c *Client) Ping() (response *binance.PingResponse, err error) {
+	response = &binance.PingResponse{}
 	err = c.GetByAbsPath("ping", nil, nil, response)
 	if err != nil {
 		return

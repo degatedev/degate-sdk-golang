@@ -64,7 +64,7 @@ type WithdrawHistory struct {
 	TransferType       int    `json:"transferType"`
 	Status             int    `json:"status"`
 	TransactionFee     string `json:"transactionFee"`
-	ConfirmNo          int    `json:"confirmNo"`
+	//ConfirmNo          int    `json:"confirmNo"`
 	Info               string `json:"info"`
 	TxId               string `json:"txId"`
 }
@@ -104,7 +104,7 @@ type DepositHistory struct {
 	TxId          string `json:"txId"`
 	InsertTime    int    `json:"insertTime"`
 	TransferType  int    `json:"transferType"`
-	UnlockConfirm string `json:"unlockConfirm"`
+	//UnlockConfirm string `json:"unlockConfirm"`
 	ConfirmTimes  string `json:"confirmTimes"`
 }
 

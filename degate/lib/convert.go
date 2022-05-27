@@ -29,7 +29,6 @@ func ConvertOrder(o *model.OrderList) (order *binance.Order) {
 	}
 	var (
 		pow10 = decimal.NewFromInt(10)
-		//zero  = decimal.NewFromInt(0)
 	)
 	order = &binance.Order{}
 	order.Symbol = o.GetSymbol()
@@ -150,16 +149,15 @@ func ConvertWithdraw(w *model.WithdrawalData) (withdraw *binance.WithdrawHistory
 		return
 	}
 	withdraw = &binance.WithdrawHistory{
-		Address:      w.ToAddress,
-		ApplyTime:    FormatTime(w.UpdateTime),
-		Id:           w.WithdrawID,
+		Address:   w.ToAddress,
+		ApplyTime: FormatTime(w.UpdateTime),
+		Id:        w.WithdrawID,
 		TransferType: 0,
 		TxId:         w.TxHash,
+		Network: "ETH",
 	}
 
-	if strings.EqualFold(w.Status, "processed") {
-		withdraw.Status = 2
-	} else if strings.EqualFold(w.Status, "PROCESSING") {
+	if strings.EqualFold(w.Status, "PROCESSING") {
 		withdraw.Status = 4
 	} else if strings.EqualFold(w.Status, "FAILED") {
 		withdraw.Status = 5
@@ -191,24 +189,23 @@ func ConvertDeposits(ws []*model.DepositData) (deposits []*binance.DepositHistor
 	return
 }
 
-// ConvertDeposit (0:pending,6: credited but cannot withdraw, 1:success)
 func ConvertDeposit(w *model.DepositData) (deposit *binance.DepositHistory, err error) {
 	if w == nil {
 		return
 	}
 	deposit = &binance.DepositHistory{
-		Address:      w.Owner,
-		InsertTime:   int(w.CreateTime * 1000),
+		Address:    w.Owner,
+		InsertTime: int(w.CreateTime * 1000),
+		Network:    "ETH",
 		TransferType: 0,
 		TxId:         w.L2TrxID,
+		ConfirmTimes: "12/12",
 	}
 
 	if strings.EqualFold(w.Status, "PROCESSING") {
-		deposit.Status = 0
+		deposit.Status = 6
 	} else if strings.EqualFold(w.Status, "COMPLETED") {
 		deposit.Status = 1
-	} else if strings.EqualFold(w.Status, "PROCESSED") {
-		deposit.Status = 6
 	}
 	if w.Token != nil {
 		deposit.Coin = w.Token.Symbol
@@ -367,6 +364,7 @@ func ConvertTradeHistory(t *model.TradeData) (trade *binance.TradeHistory, err e
 		return
 	}
 	trade = &binance.TradeHistory{}
+	//trade.Symbol = GetSymbol(t.FilledBuyToken, t.FilledSellToken, t.IsBuy)
 	trade.Id = t.ID
 	//trade.OrderId = t.OrderId
 	//trade.OrderListId = -1
@@ -380,6 +378,12 @@ func ConvertTradeHistory(t *model.TradeData) (trade *binance.TradeHistory, err e
 		trade.Qty = GetAmountNew(t.FilledSellToken.Volume, t.FilledSellToken.Decimals)
 		trade.QuoteQty = GetAmountNew(t.FilledBuyToken.Volume, t.FilledBuyToken.Decimals)
 	}
+	//if trade.Commission, err = GetAmount(t.FilledGasFeeToken.Volume, t.FilledGasFeeToken.Decimals, 8); err != nil {
+	//	return
+	//}
+	//trade.CommissionAsset = t.FilledGasFeeToken.Symbol
+	//trade.IsMaker = t.IsMaker
+	//trade.IsBuyer = t.FillAmountBors
 	if t.IsBuy && t.IsMaker {
 		trade.IsBuyerMaker = true
 	}
@@ -540,27 +544,18 @@ func ConvertOrderTrade(quoteToken *model.TokenInfo, baseToken *model.TokenInfo, 
 	if len(trades) > 0 {
 		var fills []*binance.OrderFill
 		for _, trade := range trades {
-			var price decimal.Decimal
-			fill := &binance.OrderFill{}
+			fill := &binance.OrderFill{
+				Price:trade.Price,
+			}
 			fillSellA, _ := decimal.NewFromString(trade.FillSA)
 			fillSellB, _ := decimal.NewFromString(trade.FillSB)
 			if trade.OrderA.TokenS == uint32(quoteToken.Id) {
-				if trade.IsStatble {
-					price = util.GetEffectivePriceRound(fillSellA.DivRound(fillSellB, 32).Mul(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals-quoteToken.Decimals))), trade.IsStatble, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1)
-				} else {
-					price = util.GetEffectivePriceRound(fillSellA.DivRound(fillSellB, 32).Mul(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals-quoteToken.Decimals))), trade.IsStatble, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000)
-				}
-				fill.Price = price.String()
+				// buy
 				fill.Qty = fillSellB.DivRound(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals)), 32).String()
 				fill.Commission = decimal.NewFromInt(int64(trade.OrderA.FeeBips)).Mul(fillSellB).DivRound(decimal.NewFromInt(10000), 32).DivRound(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals)), 32).String()
 				fill.CommissionAsset = baseToken.Symbol
 			} else {
-				if trade.IsStatble {
-					price = util.GetEffectivePriceRound(fillSellB.DivRound(fillSellA, 32).Mul(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals-quoteToken.Decimals))), trade.IsStatble, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1)
-				} else {
-					price = util.GetEffectivePriceRound(fillSellB.DivRound(fillSellA, 32).Mul(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals-quoteToken.Decimals))), trade.IsStatble, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000)
-				}
-				fill.Price = price.String()
+				// sell
 				fill.Qty = fillSellA.DivRound(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals)), 32).String()
 				fill.Commission = decimal.NewFromInt(int64(trade.OrderA.FeeBips)).Mul(fillSellB).DivRound(decimal.NewFromInt(10000), 32).DivRound(pow10.Pow(decimal.NewFromInt32(quoteToken.Decimals)), 32).String()
 				fill.CommissionAsset = quoteToken.Symbol
@@ -909,6 +904,7 @@ func ConvertOffChainFee(fees *model.OffChainFee) (offChainFee *binance.OffChainF
 	offChainFee.MiningGasFees, err = ConvertGasFee(fees.MiningGasFees)
 
 	offChainFee.OnChainCancelOrderGasFees, err = ConvertGasFee(fees.OnChainCancelOrderGasFees)
+
 	return
 }
 

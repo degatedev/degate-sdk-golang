@@ -141,6 +141,7 @@ func TestGetDeposits(t *testing.T) {
 	client.SetAppConfig(appConfig)
 	response, err := client.GetDeposits(&model.DepositsParam{
 		Coin:  "ETH",
+		Status: 1,
 		Limit: 10,
 	})
 
@@ -166,6 +167,7 @@ func TestGetWithdraws(t *testing.T) {
 	client.SetAppConfig(appConfig)
 	response, err := client.GetWithdraws(&model.WithdrawsParam{
 		Coin: "ETH",
+		Status:6,
 	})
 	if err != nil {
 		log.Print("error Withdraws: %v", err)

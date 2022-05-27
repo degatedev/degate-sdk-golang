@@ -639,7 +639,7 @@ func CancelAllOrders(config *conf.AppConfig, p string) (response *binance.Respon
 	return
 }
 
-func Ping(config *conf.AppConfig) (response *binance.TimeResponse, err error) {
+func Ping(config *conf.AppConfig) (response *binance.PingResponse, err error) {
 	c := &spot.Client{}
 	c.SetAppConfig(config)
 	response, err = c.Ping()

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2 - 2022-05-27
+### Fixed
+- GetDeposits status remove 0
+- GetWithdraws status remove 2
 
 ## 1.0.1 - 2022-05-25
 ### Fixed

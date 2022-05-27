@@ -9,6 +9,11 @@ type Time struct {
 	ServerTime int `json:"serverTime"`
 }
 
+type PingResponse struct {
+	Response
+	Data struct{} `json:"data"`
+}
+
 type ExchangeInfoResponse struct {
 	Response
 	Data *ExchangeInfo `json:"data"`

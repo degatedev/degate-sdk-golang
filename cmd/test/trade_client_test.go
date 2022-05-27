@@ -84,8 +84,8 @@ func TestMarketOrder(t *testing.T) {
 	c.SetAppConfig(appConfig)
 	r, err := c.MarketOrder(&model.OrderParam{
 		Symbol:   "ETHUSDC",
-		Side:     "BUY",
-		Quantity: 1,
+		Side:     "SELL",
+		Quantity: 0.05,
 	})
 	if err != nil {
 		log.Print("MarketOrder error: %v", err)

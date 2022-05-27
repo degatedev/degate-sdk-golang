@@ -677,9 +677,7 @@ func (c *Client) GetWithdraws(param *model.WithdrawsParam) (response *binance.Wi
 		Offset:    param.Offset,
 	}
 
-	if param.Status == 2 {
-		r.Status = "processed"
-	} else if param.Status == 6 {
+	if param.Status == 6 {
 		r.Status = "COMPLETED"
 	} else if param.Status == 4 {
 		r.Status = "PROCESSING"
