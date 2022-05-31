@@ -55,12 +55,10 @@ func TestHistoryTrades(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
@@ -83,12 +81,10 @@ func TestDepth(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
@@ -110,12 +106,10 @@ func TestKline(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
@@ -138,12 +132,10 @@ func TestTicker(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
@@ -165,12 +157,10 @@ func TestTickerPrice(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
@@ -192,12 +182,10 @@ func TestBookTicker(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)

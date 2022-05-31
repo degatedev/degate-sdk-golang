@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3 - 2022-05-31
+### Fixed
+- GetTicker highPrice not return
+
 ## 1.0.2 - 2022-05-27
 ### Fixed
 - GetDeposits status remove 0

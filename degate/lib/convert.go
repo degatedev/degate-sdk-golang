@@ -406,7 +406,8 @@ func ConvertTicker(t *model.Ticker) (ticker *binance.Ticker) {
 	ticker.BidQty = t.BidQty
 	ticker.AskPrice = t.AskPrice
 	ticker.AskQty = t.AskQty
-	ticker.OpenPrice = t.HighPrice
+	ticker.OpenPrice = t.OpenPrice
+	ticker.HighPrice = t.HighPrice
 	ticker.LowPrice = t.LowPrice
 	ticker.Volume = t.Volume
 	ticker.QuoteVolume = t.QuoteVolume
