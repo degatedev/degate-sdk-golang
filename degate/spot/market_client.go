@@ -57,8 +57,12 @@ func (c *Client) GetTradeRecords(param *model.TradesParam) (response *binance.Tr
 		err = errors.New("illegal limit")
 		return
 	}
+	if param.Limit > 1000 {
+		err = errors.New("illegal limit max 1000")
+		return
+	}
 	if param.Limit == 0 {
-		param.Limit = conf.Limit
+		param.Limit = 500
 	}
 	r := &model.DGTradesParam{
 		Start:  param.StartTime,
@@ -166,8 +170,12 @@ func (c *Client) GetKlines(param *model.KlineParam) (response *binance.KlineResp
 		err = errors.New("illegal limit")
 		return
 	}
+	if param.Limit > 1000 {
+		err = errors.New("illegal limit max 1000")
+		return
+	}
 	if param.Limit == 0 {
-		param.Limit = conf.Limit
+		param.Limit = 500
 	}
 	if len(param.Interval) == 0 {
 		param.Interval = "1m"

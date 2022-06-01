@@ -668,6 +668,19 @@ func (c *Client) GetWithdraws(param *model.WithdrawsParam) (response *binance.Wi
 	if err != nil {
 		return
 	}
+
+	if param.Limit < 0 {
+		err = errors.New("illegal limit")
+		return
+	}
+	if param.Limit > 1000 {
+		err = errors.New("illegal limit max 1000")
+		return
+	}
+	if param.Limit == 0 {
+		param.Limit = 1000
+	}
+
 	r := &model.WithdrawalParam{
 		AccountId: int64(c.AppConfig.AccountId),
 		Tokens:    tokenIds,
@@ -710,8 +723,16 @@ func (c *Client) GetDeposits(param *model.DepositsParam) (response *binance.Depo
 		return
 	}
 
-	if param.Limit <= 0 {
-		param.Limit = conf.Limit
+	if param.Limit < 0 {
+		err = errors.New("illegal limit")
+		return
+	}
+	if param.Limit > 1000 {
+		err = errors.New("illegal limit max 1000")
+		return
+	}
+	if param.Limit == 0 {
+		param.Limit = 1000
 	}
 
 	r := &model.DGDepositsParam{
@@ -752,6 +773,19 @@ func (c *Client) GetTransfers(param *model.TransfersParam) (response *binance.Tr
 	if err != nil {
 		return
 	}
+
+	if param.Limit < 0 {
+		err = errors.New("illegal limit")
+		return
+	}
+	if param.Limit > 1000 {
+		err = errors.New("illegal limit max 1000")
+		return
+	}
+	if param.Limit == 0 {
+		param.Limit = 1000
+	}
+
 	r := &model.WithdrawalParam{
 		AccountId: int64(c.AppConfig.AccountId),
 		Tokens:    tokenIds,
@@ -818,6 +852,19 @@ func (c *Client) GetMyTrades(param *model.AccountTradesParam) (response *binance
 		err = errors.New("no symbol")
 		return
 	}
+
+	if param.Limit < 0 {
+		err = errors.New("illegal limit")
+		return
+	}
+	if param.Limit > 1000 {
+		err = errors.New("illegal limit max 1000")
+		return
+	}
+	if param.Limit == 0 {
+		param.Limit = 500
+	}
+
 	r := &model.TradesUserParam{
 		AccountId: int64(c.AppConfig.AccountId),
 		Start:     param.StartTime,
@@ -882,6 +929,17 @@ func (c *Client) GetOrder(param *model.OrderDetailParam) (res *model.OrderDetail
 }
 
 func (c *Client) GetAllOrders(param *model.OrdersParam) (response *binance.OrdersResponse, err error) {
+	if param.Limit < 0 {
+		err = errors.New("illegal limit")
+		return
+	}
+	if param.Limit > 1000 {
+		err = errors.New("illegal limit max 1000")
+		return
+	}
+	if param.Limit == 0 {
+		param.Limit = 500
+	}
 	r := &request.OrdersRequest{
 		AccountId: c.AppConfig.AccountId,
 		Status:    model.OrderStatusOpen + "," + model.OrderStatusCanceled + "," + model.OrderStatusCompleted,
@@ -899,9 +957,7 @@ func (c *Client) GetOpenOrders(param *model.OrdersParam) (response *binance.Orde
 		AccountId: c.AppConfig.AccountId,
 		Status:    model.OrderStatusOpen,
 		Side:      "All",
-		Start:     param.StartTime,
-		End:       param.EndTime,
-		Limit:     param.Limit,
+		Limit:     1000,
 	}
 	response, err = c.GetOrders(param.Symbol, r)
 	return
@@ -958,10 +1014,6 @@ func (c *Client) GetOrders(symbol string, r *request.OrdersRequest) (response *b
 }
 
 func (c *Client) getOrders(r *request.OrdersRequest) (response *binance.OrdersResponse, err error) {
-	if r.Limit < 0 || r.Limit > 1000 {
-		err = errors.New("illegal limit 0-1000")
-		return
-	}
 	header, err := c.GetHeaderSign()
 	if err != nil {
 		return

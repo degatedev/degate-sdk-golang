@@ -278,18 +278,15 @@ func TestGetOpenOrders(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
-		Decimals: 18,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       8,
 		Symbol:   "USDC",
-		Decimals: 18,
 	})
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
 	r, err := c.GetOpenOrders(&model.OrdersParam{
 		Symbol: "ETHUSDC",
-		Limit:  20,
 	})
 	if err != nil {
 		log.Info("OpenOrders error: %v", err)

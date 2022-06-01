@@ -2,7 +2,6 @@ package lib
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/degatedev/degate-sdk-golang/conf"
@@ -298,7 +297,7 @@ func ConvertBalances(bs []*model.Balances) (balances []*binance.Balance, err err
 func ConvertTrades(trades []*model.TradeData) (bTrades []*binance.Trade, err error) {
 	var bt *binance.Trade
 	for _, t := range trades {
-		fmt.Println(*t, *t.FilledSellToken, *t.FilledBuyToken)
+		//fmt.Println(*t, *t.FilledSellToken, *t.FilledBuyToken)
 		if t != nil {
 			if bt, err = ConvertTrade(t); err == nil && bt != nil {
 				bTrades = append(bTrades, bt)

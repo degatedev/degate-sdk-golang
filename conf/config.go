@@ -16,11 +16,9 @@ var (
 	OrderBookPath         = "order-book-api/"
 	WsPath                = "order-book-ws-api/"
 	EffectiveDigits       = 6
-	EffectiveDecimal      = 8
 	GasFeeEffectiveDigits = 3
 	Timeout               = 60
 	ValidUntil            = int64(60 * 60 * 24 * 30)
-	Limit                 = int64(20)
 	DepthLimit            = int64(100)
 	MaxRetryNum           = 11
 	PongInterval          = 5
