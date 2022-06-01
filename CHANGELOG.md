@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.4 - 2022-06-01
+### Fixed
+- SubscribeTicker
+- SubscribeUserData executionReport
+
 ## 1.0.3 - 2022-05-31
 ### Fixed
 - GetTicker highPrice not return

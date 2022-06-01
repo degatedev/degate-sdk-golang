@@ -73,8 +73,8 @@ type TickerPayload struct {
 	Q1 string `json:"q"`
 	O1 int    `json:"O"`
 	C1 int    `json:"C"`
-	F  int    `json:"F"`
-	L1 int    `json:"L"`
+	F  string `json:"F"`
+	L1 string `json:"L"`
 	N  int    `json:"n"`
 }
 
@@ -132,30 +132,19 @@ type ExecutionReportPayload struct {
 	C  string `json:"c"`
 	S1 string `json:"S"`
 	O  string `json:"o"`
-	F  string `json:"f"`
 	Q  string `json:"q"`
 	P  string `json:"p"`
-	P1 string `json:"P"`
-	F1 string `json:"F"`
-	G  int    `json:"g"`
-	C1 string `json:"C"`
 	X  string `json:"x"`
 	X1 string `json:"X"`
-	R  string `json:"r"`
+	R  int    `json:"r"`
 	I  string `json:"i"`
-	L  string `json:"l"`
 	Z  string `json:"z"`
-	L1 string `json:"L"`
 	N  string `json:"n"`
 	N1 string `json:"N"`
 	T  int    `json:"T"`
-	T1 int    `json:"t"`
-	I1 int    `json:"I"`
+	T1 string `json:"t"`
 	W  bool   `json:"w"`
-	M  bool   `json:"m"`
-	M1 bool   `json:"M"`
 	O1 int    `json:"O"`
 	Z1 string `json:"Z"`
-	Y  string `json:"Y"`
 	Q1 string `json:"Q"`
 }

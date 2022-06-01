@@ -8,8 +8,6 @@ import (
 	"github.com/degatedev/degate-sdk-golang/conf"
 	"github.com/degatedev/degate-sdk-golang/degate/binance"
 	"github.com/degatedev/degate-sdk-golang/degate/model"
-	"github.com/degatedev/degate-sdk-golang/util"
-
 	"github.com/shopspring/decimal"
 )
 
@@ -780,12 +778,12 @@ func ConvertBalanceUpdatePayload(payload *model.BalanceUpdatePayload) (p *binanc
 func ConvertExecutionReportPayload(payload *model.ExecutionReportPayload) (p *binance.ExecutionReportPayload, err error) {
 	p = &binance.ExecutionReportPayload{
 		E1: payload.E1,
-		F:  "GTC",
-		G:  -1,
 		I:  payload.O,
 		T:  payload.U1,
 		O1: payload.R,
 		N:  payload.K,
+		R:  payload.C1,
+		P:  payload.P1,
 	}
 	p.E = payload.E
 	if payload.T == 0 {
@@ -793,31 +791,44 @@ func ConvertExecutionReportPayload(payload *model.ExecutionReportPayload) (p *bi
 	} else if payload.T == 1 {
 		p.O = "MARKET"
 	}
+
 	if strings.EqualFold(payload.U, "OPEN") {
 		p.X1 = "NEW"
 		p.W = true
 	} else if strings.EqualFold(payload.U, "CANCELED") {
 		p.X1 = "CANCELED"
+	} else if strings.EqualFold(payload.U,"processing") {
+		p.X1 = "PARTIALLY_FILLED"
+		p.W = true
 	} else if strings.EqualFold(payload.U, "COMPLETED") {
-		if fDec, err := decimal.NewFromString(payload.F1); err == nil {
-			if dDec, err := decimal.NewFromString(payload.D); err == nil {
-				if fDec.GreaterThanOrEqual(dDec) {
-					p.X1 = "COMPLETED"
-				} else {
-					p.X1 = "PARTIALLY_FILLED"
-				}
-			}
-		}
+		p.X1 = "COMPLETED"
 	}
+
+	if strings.EqualFold(payload.U, "OPEN") {
+		p.X = "NEW"
+	} else if strings.EqualFold(payload.U, "CANCELED") {
+		if payload.C1 == 1 || payload.C1 == 11 {
+			p.X = "CANCELED"
+		} else if payload.C1 == 6 || payload.C1 == 7 {
+			p.X = "EXPIRED"
+		} else if payload.C1 != 0 {
+			p.X = "REJECTED"
+		}
+	} else {
+		p.X = "TRADE"
+	}
+
 	var (
 		pow10       = decimal.NewFromInt(10)
 		baseVolume  string
 		quoteVolume string
+		baseFillVolume string
+		quoteFillVolume string
 		baseDec     decimal.Decimal
 		quoteDec    decimal.Decimal
 		feeVolume   decimal.Decimal
-		excVolume   string
-		excDec      decimal.Decimal
+		baseFillVolumeDec decimal.Decimal
+		quoteFillVolumeDec decimal.Decimal
 		feeToken    *model.TokenInfo
 		sellToken   *model.TokenInfo
 		buyToken    *model.TokenInfo
@@ -827,8 +838,8 @@ func ConvertExecutionReportPayload(payload *model.ExecutionReportPayload) (p *bi
 
 	if feeToken = conf.Conf.GetTokenInfoById(payload.F); feeToken != nil {
 		p.N1 = feeToken.Symbol
-		if len(payload.L) > 0 {
-			if feeVolume, err = decimal.NewFromString(payload.L); err != nil {
+		if len(payload.K) > 0 {
+			if feeVolume, err = decimal.NewFromString(payload.K); err != nil {
 				return
 			}
 		}
@@ -841,14 +852,16 @@ func ConvertExecutionReportPayload(payload *model.ExecutionReportPayload) (p *bi
 		p.S1 = "BUY"
 		baseVolume = payload.D1
 		quoteVolume = payload.D
-		excVolume = payload.C
+		baseFillVolume = payload.C
+		quoteFillVolume = payload.F1
 		baseToken = buyToken
 		quoteToken = sellToken
 	} else {
 		p.S1 = "SELL"
 		baseVolume = payload.D
 		quoteVolume = payload.D1
-		excVolume = payload.F1
+		baseFillVolume = payload.F1
+		quoteFillVolume = payload.C
 		baseToken = sellToken
 		quoteToken = buyToken
 	}
@@ -859,24 +872,28 @@ func ConvertExecutionReportPayload(payload *model.ExecutionReportPayload) (p *bi
 				return
 			}
 		}
-		p.Q = baseDec.DivRound(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals)), 32).StringFixedBank(int32(conf.EffectiveDecimal))
+		p.Q = baseDec.DivRound(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals)), 32).String()
 
 		if len(quoteVolume) > 0 {
 			if quoteDec, err = decimal.NewFromString(quoteVolume); err != nil {
 				return
 			}
 		}
-		p.Q1 = quoteDec.DivRound(pow10.Pow(decimal.NewFromInt32(quoteToken.Decimals)), 32).StringFixedBank(int32(conf.EffectiveDecimal))
+		p.Q1 = quoteDec.DivRound(pow10.Pow(decimal.NewFromInt32(quoteToken.Decimals)), 32).String()
 
-		price := util.GetEffectivePriceRound(quoteDec.DivRound(baseDec, 32).Mul(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals-quoteToken.Decimals))), false, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000)
-		p.P = price.String()
-
-		if len(excVolume) > 0 {
-			if excDec, err = decimal.NewFromString(excVolume); err != nil {
+		if len(baseFillVolume) > 0 {
+			if baseFillVolumeDec, err = decimal.NewFromString(baseFillVolume); err != nil {
 				return
 			}
 		}
-		p.Z = excDec.DivRound(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals)), 32).StringFixedBank(int32(conf.EffectiveDecimal))
+		p.Z = baseFillVolumeDec.DivRound(pow10.Pow(decimal.NewFromInt32(baseToken.Decimals)), 32).String()
+
+		if len(quoteFillVolume) > 0 {
+			if quoteFillVolumeDec, err = decimal.NewFromString(quoteFillVolume); err != nil {
+				return
+			}
+		}
+		p.Z1 = quoteFillVolumeDec.DivRound(pow10.Pow(decimal.NewFromInt32(quoteToken.Decimals)), 32).String()
 	}
 	return
 }

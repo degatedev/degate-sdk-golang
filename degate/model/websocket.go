@@ -98,9 +98,10 @@ type TickerPayload struct {
 	Q1 string `json:"q"`
 	O1 int    `json:"O"`
 	C1 int    `json:"C"`
-	F  int    `json:"F"`
-	L1 int    `json:"L"`
+	F  string `json:"F"`
+	L1 string `json:"L"`
 	N  int    `json:"n"`
+	U1 string `json:"u"`
 }
 
 type SubscribeBookTickerParam struct {
@@ -201,6 +202,9 @@ type ExecutionReportPayload struct {
 	T1 int    `json:"t"`
 	R  int    `json:"r"`
 	U1 int    `json:"U"`
+	C1 int    `json:"C"`
+	P1 string `json:"P"`
+	M1 string `json:"m"`
 }
 
 type SubscribeUserDataParam struct {
