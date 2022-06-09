@@ -127,3 +127,16 @@ type TransferResponse struct {
 type TransferID struct {
 	TranId string `json:"tranId"`
 }
+
+type GasFeeTokenResponse struct {
+	Response
+	Data *GasFeeToken `json:"data"`
+}
+
+type GasFeeToken struct {
+	WithdrawalGasFees         []*GasFee `json:"withdrawal_gas_fees"`
+	WithdrawalOtherGasFees    []*GasFee `json:"withdrawal_other_gas_fees"`
+	TransferGasFees           []*GasFee `json:"transfer_gas_fees"`
+	TransferNoIDGasFees       []*GasFee `json:"transfer_no_id_gas_fees"`
+	OnChainCancelOrderGasFees []*GasFee `json:"on_chain_cancel_order_gas_fees"`
+}

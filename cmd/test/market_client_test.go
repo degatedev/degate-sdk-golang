@@ -162,19 +162,23 @@ func TestTickerPrice(t *testing.T) {
 		Id:       8,
 		Symbol:   "USDC",
 	})
+	conf.Conf.AddToken(&model.TokenInfo{
+		Id:     9,
+		Symbol: "USDT",
+	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
 	response, err := client.GetTickerPrice(&model.PairPriceParam{
-		Symbol: "ETHUSDC",
+		Symbol: "ETHUSDC,ETHUSDT",
 	})
 	if err != nil {
-		log.Print("TickerPrice error: %v", err)
+		t.Errorf("error: %v", err)
 		return
 	}
 	if response.Success() {
-		log.Print("TickerPrice success: %v", lib.String(response.Data))
+		t.Logf("success: %v", lib.String(response.Data))
 	} else {
-		log.Print("TickerPrice fail: %v", lib.String(response))
+		t.Logf("fail: %v", lib.String(response))
 	}
 }
 

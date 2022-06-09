@@ -41,10 +41,11 @@ func send_request(c *C.char, method *C.char, params *C.char) (res *C.char) {
 	if err != nil {
 		panic(err)
 	}
-	conf.Debug = appConfig.Debug
+	log.Init(appConfig.Debug)
 	log.Info("config: %v\n", cs)
 	log.Info("method: %v\n", m)
 	log.Info("param : %v\n", p)
+
 
 	if strings.EqualFold(m, "time") {
 		response, err = GetTime(appConfig)
@@ -149,7 +150,7 @@ func send_subscribe(c *C.char, method *C.char, params *C.char, cb unsafe.Pointer
 	if err != nil {
 		panic(err)
 	}
-	conf.Debug = appConfig.Debug
+	log.Init(appConfig.Debug)
 	log.Info("config: %v\n", cs)
 	log.Info("method: %v\n", m)
 	log.Info("param : %v\n", p)
@@ -317,10 +318,10 @@ func GetExchangeInfo(config *conf.AppConfig) (response *binance.ExchangeInfoResp
 	return
 }
 
-func GetGasFee(config *conf.AppConfig) (response *binance.GasFeeResponse, err error) {
+func GetGasFee(config *conf.AppConfig) (response *binance.GasFeeTokenResponse, err error) {
 	c := new(spot.Client)
 	c.SetAppConfig(config)
-	response, err = c.GetGasFee()
+	response, err = c.GasFee()
 	return
 }
 

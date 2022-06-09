@@ -64,7 +64,7 @@ type Ticker struct {
 
 type PairPriceResponse struct {
 	Response
-	Data *PairPrice `json:"data"`
+	Data []*PairPrice `json:"data"`
 }
 
 type PairPrice struct {

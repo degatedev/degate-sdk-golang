@@ -11,6 +11,7 @@ require (
 	github.com/ethersphere/bee v1.4.1
 	github.com/gorilla/websocket v1.4.2
 	github.com/shopspring/decimal v1.3.1
+	github.com/sirupsen/logrus v1.6.0
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20210813211128-0a44fdfbc16e
 	nhooyr.io/websocket v1.8.7

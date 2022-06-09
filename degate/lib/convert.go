@@ -987,14 +987,18 @@ func ConvertTokenInfoToTokenData(info *model.TokenInfo) *model.ShowTokenData {
 	return data
 }
 
-func ConvertPairPrice(symbol string, t *model.PairsPricesRes) (ticker *binance.PairPrice) {
-	if t == nil {
+func ConvertPairPrice(symbol map[uint64]string, t []*model.PairsPricesRes) (tickers []*binance.PairPrice) {
+	if len(t) == 0 {
 		return
 	}
-	ticker = &binance.PairPrice{
-		Price:  t.Price,
-		Symbol: symbol,
+	for _,p := range t {
+		ticker := &binance.PairPrice{
+			Price:  p.Price,
+			Symbol: symbol[p.PairID],
+		}
+		tickers = append(tickers,ticker)
 	}
+
 	return
 }
 
@@ -1012,6 +1016,20 @@ func ConvertBookTicker(symbol string, t *model.BookTickerData) (ticker *binance.
 	if len(t.Bids) > 0 {
 		ticker.BidPrice = t.Bids[0][0]
 		ticker.BidQty = t.Bids[0][1]
+	}
+	return
+}
+
+func ConvertGasFeeToken(fees *binance.OffChainFee) (gasFee *binance.GasFeeToken) {
+	if fees == nil {
+		return
+	}
+	gasFee = &binance.GasFeeToken{
+		WithdrawalGasFees:fees.WithdrawalGasFees,
+		WithdrawalOtherGasFees:fees.WithdrawalOtherGasFees,
+		TransferGasFees:fees.TransferGasFees,
+		TransferNoIDGasFees: fees.TransferNoIDGasFees,
+		OnChainCancelOrderGasFees: fees.OnChainCancelOrderGasFees,
 	}
 	return
 }

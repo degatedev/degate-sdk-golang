@@ -30,15 +30,15 @@ func TestTime(t *testing.T) {
 func TestGasFee(t *testing.T) {
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
-	r, err := c.GetGasFee()
+	r, err := c.GasFee()
 	if err != nil {
-		log.Print("GasFee error: %v", err)
+		t.Errorf("error: %v", err)
 		return
 	}
 	if r.Success() {
-		log.Print("GasFee success\n: %v", lib.String(r.Data))
+		t.Logf("success: %v", lib.String(r.Data))
 	} else {
-		log.Print("GasFee fail: %v", lib.String(r))
+		t.Logf("fail: %v", lib.String(r))
 	}
 }
 

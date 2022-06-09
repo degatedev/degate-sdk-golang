@@ -11,6 +11,21 @@ import (
 	"github.com/degatedev/degate-sdk-golang/degate/model"
 )
 
+func (c *Client) GasFee() (response *binance.GasFeeTokenResponse, err error) {
+	res,err := c.GetGasFee()
+	if err != nil {
+		return
+	}
+	response = &binance.GasFeeTokenResponse{}
+	if err = model.Copy(response, &res.Response); err != nil {
+		return
+	}
+	if res.Success() {
+		response.Data = lib.ConvertGasFeeToken(res.Data)
+	}
+	return
+}
+
 func (c *Client) GetGasFee() (response *binance.GasFeeResponse, err error) {
 	res := &model.GasFeeResponse{}
 	err = c.Get("user/offChainFee", nil, nil, res)

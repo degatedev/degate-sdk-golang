@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/degatedev/degate-sdk-golang/degate/request"
 	"strconv"
+	"strings"
 
 	"github.com/degatedev/degate-sdk-golang/conf"
 	"github.com/degatedev/degate-sdk-golang/degate/binance"
@@ -247,29 +248,46 @@ func (c *Client) GetTickerPrice(param *model.PairPriceParam) (response *binance.
 		err = errors.New("no symbol")
 		return
 	}
-	baseToken, quoteToken := conf.Conf.GetTokens(param.Symbol)
-	if baseToken == nil {
-		err = errors.New("not config base symbol")
-		return
+	var (
+		pairIds string
+		symbols = strings.Split(param.Symbol,",")
+		symbolMap = map[uint64]string{}
+	)
+	for _,symbol := range symbols {
+		var pairRes *model.PairInfoResponse
+		baseToken, quoteToken := conf.Conf.GetTokens(symbol)
+		if baseToken == nil {
+			err = errors.New("not config base symbol")
+			return
+		}
+		if quoteToken == nil {
+			err = errors.New("not config quote symbol")
+			return
+		}
+		pairRes, err = c.GetPair(&request.PairInfoRequest{
+			Token1: uint64(baseToken.Id),
+			Token2: uint64(quoteToken.Id),
+		})
+		if err != nil {
+			return
+		}
+		if pairRes == nil || !pairRes.Success() || pairRes.Data == nil {
+			err = errors.New("not find pair")
+			return
+		}
+		pairIds += strconv.Itoa(int(pairRes.Data.PairID))+","
+		symbolMap[pairRes.Data.PairID] = symbol
 	}
-	if quoteToken == nil {
-		err = errors.New("not config quote symbol")
-		return
+	if len(pairIds) > 0 {
+		pairIds = pairIds[0:len(pairIds)-1]
 	}
-	pairRes, err := c.GetPair(&request.PairInfoRequest{
-		Token1: uint64(baseToken.Id),
-		Token2: uint64(quoteToken.Id),
-	})
-	if err != nil {
-		return
-	}
-	if pairRes == nil || !pairRes.Success() || pairRes.Data == nil {
+	if len(pairIds) == 0 {
 		err = errors.New("not find pair")
 		return
 	}
 
 	r := &model.DGPairPriceParam{
-		Pairs: strconv.Itoa(int(pairRes.Data.PairID)),
+		Pairs: pairIds,
 	}
 	res := &model.PairPriceResponse{}
 	err = c.GetByAbsPath(conf.WsPath+"pairs/prices", nil, r, res)
@@ -281,7 +299,7 @@ func (c *Client) GetTickerPrice(param *model.PairPriceParam) (response *binance.
 		return
 	}
 	if len(res.Data) > 0 {
-		response.Data = lib.ConvertPairPrice(param.Symbol, res.Data[0])
+		response.Data = lib.ConvertPairPrice(symbolMap, res.Data)
 	}
 	return
 }
