@@ -37,7 +37,7 @@ func (c *Client) SetAppConfig(config *conf.AppConfig) *Client {
 
 func (c *Client) GetHttpClient() *internal.HttpClient {
 	if c.httpClient == nil {
-		c.httpClient = internal.New(time.Duration(c.AppConfig.Timeout)*time.Second, 0.01)
+		c.httpClient = internal.New(time.Duration(c.AppConfig.Timeout)*time.Second, 0.01,c.AppConfig.ShowHeader)
 	}
 	return c.httpClient
 }

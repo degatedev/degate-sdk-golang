@@ -5,6 +5,7 @@ type Response struct {
 	HttpBodyText   string `json:"http_body_text"`
 	Code           int    `json:"code"`
 	Message        string `json:"message"`
+	Header         map[string]string `json:"header"`
 }
 
 type ListData struct {

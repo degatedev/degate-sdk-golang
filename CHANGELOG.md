@@ -1,9 +1,16 @@
 # Changelog
 
 
+
+## 1.0.7 - 2022-06-13
+### Added
+- response add header
+
+
 ## 1.0.6 - 2022-06-09
 ### Added
 - GasFee
+
 
 ## 1.0.5 - 2022-06-02
 ### Fixed

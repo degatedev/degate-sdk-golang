@@ -16,14 +16,16 @@ import (
 type HttpClient struct {
 	client     *http.Client
 	sampleRate float64
+	showHeader bool
 }
 
-func New(timeout time.Duration, sampleRate float64) *HttpClient {
+func New(timeout time.Duration, sampleRate float64,showHeader bool) *HttpClient {
 	return &HttpClient{
 		client: &http.Client{
 			Timeout: timeout,
 		},
 		sampleRate: sampleRate,
+		showHeader: showHeader,
 	}
 }
 
@@ -120,18 +122,28 @@ func (client *HttpClient) req(request *http.Request, params interface{}, result 
 	}
 
 	statusCode := httpResponse.StatusCode
-	statuCodeJson := fmt.Sprintf("{\"http_status_code\":%v}", statusCode)
-	_ = json.Unmarshal([]byte(statuCodeJson), result)
-	log.Info("getting %v, statusCode: %v, body: %v", request.URL.String(), statusCode, body.String())
+	statusCodeJson := fmt.Sprintf("{\"http_status_code\":%v}", statusCode)
+	_ = json.Unmarshal([]byte(statusCodeJson), result)
+	log.Info("raw response from server statusCode: %v, body: %v",  statusCode, body.String())
 
 	e := json.Unmarshal(body.Bytes(), result)
 	if e != nil {
 		log.Error("error Unmarshal %v: %v", request.URL.String(), e)
 		textJson := fmt.Sprintf("{\"http_body_text\": %v}", strconv.Quote(body.String()))
 		e = json.Unmarshal([]byte(textJson), result)
-		// fmt.Println("resp body error:", e)
 	}
 
+	if client.showHeader {
+		newHeader := map[string]string{}
+		for k,v := range httpResponse.Header {
+			if len(v) > 0 {
+				newHeader[k] = v[0]
+			}
+		}
+		header,_ := json.Marshal(newHeader)
+		headerJson := fmt.Sprintf("{\"header\":%v}", string(header))
+		_ = json.Unmarshal([]byte(headerJson), result)
+	}
 	return
 }
 

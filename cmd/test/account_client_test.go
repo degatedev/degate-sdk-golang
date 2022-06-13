@@ -78,6 +78,9 @@ func TestGetBalance(t *testing.T) {
 	} else {
 		t.Errorf("fail: %v", lib.String(response))
 	}
+	if appConfig.ShowHeader {
+		t.Logf("header: %v", lib.String(response.Header))
+	}
 }
 
 func TestTransfer(t *testing.T) {
