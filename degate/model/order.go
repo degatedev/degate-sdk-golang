@@ -7,13 +7,9 @@ import (
 )
 
 const (
-	OrderStatusOpen      = "OPEN"
-	OrderStatusCanceled  = "CANCELED"
-	OrderStatusCompleted = "COMPLETED"
-
-	OrdersSideBuy  = "BUY"
-	OrdersSideSell = "SELL"
-	OrdersSideAll  = "ALL"
+	OrderStatusOpen      = "open"
+	OrderStatusCanceled  = "canceled"
+	OrderStatusCompleted = "completed"
 
 	OrderTypeLimit  = "LIMIT"
 	OrderTypeMarket = "MARKET"
@@ -96,7 +92,7 @@ type CancelAllOrderParam struct {
 	AccountId      uint64 `json:"account_id" form:"account_id" binding:"required"`
 	Timestamp      int64  `json:"timestamp" form:"timestamp" binding:"required"`
 	IncludeGrid    bool   `json:"include_grid" form:"include_grid"`
-	EDDSASignature string `json:"eddsa_signature" form:"eddsa_signature" binding:"required"` // AccountId + Timestamp + IncludeGrid
+	EDDSASignature string `json:"eddsa_signature" form:"eddsa_signature" binding:"required"`
 }
 
 type CancelAllOrderResponse struct {
@@ -119,7 +115,6 @@ type OrdersParam struct {
 	StartTime int64
 	EndTime   int64
 	Limit     int64
-	SortOrder string
 }
 
 type OrdersParamWithTokenId struct {
@@ -128,7 +123,6 @@ type OrdersParamWithTokenId struct {
 	StartTime int64
 	EndTime   int64
 	Limit     int64
-	SortOrder string
 }
 
 type ShowTokenData struct {

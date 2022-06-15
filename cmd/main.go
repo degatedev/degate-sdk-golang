@@ -75,8 +75,8 @@ func send_request(c *C.char, method *C.char, params *C.char) (res *C.char) {
 		response, err = GetTransfers(appConfig, p)
 	} else if strings.EqualFold(m, "order") {
 		response, err = GetOrder(appConfig, p)
-	} else if strings.EqualFold(m, "orders") {
-		response, err = GetAllOrders(appConfig, p)
+	} else if strings.EqualFold(m, "historyOrders") {
+		response, err = GetHistoryOrders(appConfig, p)
 	} else if strings.EqualFold(m, "openOrders") {
 		response, err = GetOpenOrders(appConfig, p)
 	} else if strings.EqualFold(m, "myTrades") {
@@ -446,14 +446,14 @@ func GetOrder(config *conf.AppConfig, p string) (response *binance.OrderResponse
 	return
 }
 
-func GetAllOrders(config *conf.AppConfig, p string) (response *binance.OrdersResponse, err error) {
+func GetHistoryOrders(config *conf.AppConfig, p string) (response *binance.OrdersResponse, err error) {
 	c := new(spot.Client)
 	c.SetAppConfig(config)
 	param := &model.OrdersParam{}
 	if err = lib.ParseParam(p, param); err != nil {
 		return
 	}
-	response, err = c.GetAllOrders(param)
+	response, err = c.GetHistoryOrders(param)
 	return
 }
 

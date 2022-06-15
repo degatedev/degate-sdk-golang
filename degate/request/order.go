@@ -41,5 +41,4 @@ type OrdersRequest struct {
 	Status    string `json:"status"`
 	Limit     int64  `json:"limit"`
 	Offset    int64  `json:"offset"`
-	SortOrder string `json:"sort_order"`
 }

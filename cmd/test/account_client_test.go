@@ -245,7 +245,7 @@ func TestGetOrder(t *testing.T) {
 	}
 }
 
-func TestGetAllOrders(t *testing.T) {
+func TestGetHistoryOrders(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
 		Id:       0,
 		Symbol:   "ETH",
@@ -256,18 +256,18 @@ func TestGetAllOrders(t *testing.T) {
 	})
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
-	r, err := c.GetAllOrders(&model.OrdersParam{
-		Symbol: "ETHUSDC",
-		Limit:  20,
+	r, err := c.GetHistoryOrders(&model.OrdersParam{
+		Symbol:    "ETHUSDC",
+		Limit: 20,
 	})
 	if err != nil {
 		t.Errorf("error: %v", err)
 		return
 	}
 	if r.Success() {
-		t.Logf("success %v", lib.String(r.Data))
+		t.Logf("%v", lib.String(r.Data))
 	} else {
-		t.Errorf("fail: %v", lib.String(r))
+		t.Errorf("%v", lib.String(r))
 	}
 }
 

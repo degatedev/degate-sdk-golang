@@ -928,7 +928,7 @@ func (c *Client) GetOrder(param *model.OrderDetailParam) (res *model.OrderDetail
 	return
 }
 
-func (c *Client) GetAllOrders(param *model.OrdersParam) (response *binance.OrdersResponse, err error) {
+func (c *Client) GetHistoryOrders(param *model.OrdersParam) (response *binance.OrdersResponse, err error) {
 	if param.Limit < 0 {
 		err = errors.New("illegal limit")
 		return
@@ -942,8 +942,7 @@ func (c *Client) GetAllOrders(param *model.OrdersParam) (response *binance.Order
 	}
 	r := &request.OrdersRequest{
 		AccountId: c.AppConfig.AccountId,
-		Status:    model.OrderStatusOpen + "," + model.OrderStatusCanceled + "," + model.OrderStatusCompleted,
-		Side:      "All",
+		Status:    model.OrderStatusCanceled + "," + model.OrderStatusCompleted,
 		Start:     param.StartTime,
 		End:       param.EndTime,
 		Limit:     param.Limit,
@@ -956,7 +955,6 @@ func (c *Client) GetOpenOrders(param *model.OrdersParam) (response *binance.Orde
 	r := &request.OrdersRequest{
 		AccountId: c.AppConfig.AccountId,
 		Status:    model.OrderStatusOpen,
-		Side:      "All",
 		Limit:     1000,
 	}
 	response, err = c.GetOrders(param.Symbol, r)
@@ -967,13 +965,11 @@ func (c *Client) GetOpenOrdersWithTokenId(param *model.OrdersParamWithTokenId) (
 	r := &request.OrdersRequest{
 		AccountId: c.AppConfig.AccountId,
 		Status:    model.OrderStatusOpen,
-		Side:      "All",
 		Start:     param.StartTime,
 		End:       param.EndTime,
 		Limit:     param.Limit,
 		Token1:    param.TokenId1,
 		Token2:    param.TokenId2,
-		SortOrder: param.SortOrder,
 	}
 	return c.getOrderLists(r, "orders")
 }
@@ -982,13 +978,11 @@ func (c *Client) GetMakerOpenOrdersWithTokenId(param *model.OrdersParamWithToken
 	r := &request.OrdersRequest{
 		AccountId: c.AppConfig.AccountId,
 		Status:    model.OrderStatusOpen,
-		Side:      "All",
 		Start:     param.StartTime,
 		End:       param.EndTime,
 		Limit:     param.Limit,
 		Token1:    param.TokenId1,
 		Token2:    param.TokenId2,
-		SortOrder: param.SortOrder,
 	}
 	return c.getOrderLists(r, "makerOrders")
 }
