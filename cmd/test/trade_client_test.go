@@ -29,7 +29,7 @@ func TestNewOrder(t *testing.T) {
 		Type:     model.OrderTypeLimit,
 	})
 	if err != nil {
-		log.Print("NewOrder error: %v", err)
+		t.Errorf("error: %v", err)
 		return
 	}
 	if r.Success() {

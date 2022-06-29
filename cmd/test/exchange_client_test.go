@@ -118,7 +118,7 @@ func TestExchangeInfo(t *testing.T) {
 	c.SetAppConfig(appConfig)
 	r, err := c.GetExchangeInfo()
 	if err != nil {
-		log.Print("ExchangeInfo error: %v", err)
+		t.Errorf("error: %v", err)
 		return
 	}
 	if r.Success() {

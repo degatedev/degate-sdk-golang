@@ -21,17 +21,18 @@ type ExchangeInfoResponse struct {
 
 type ExchangeInfo struct {
 	ChainID              int64   `json:"chain_id"`
-	ExchangeAddress      string  `json:"exchange_address"`
-	DepositAddress       string  `json:"deposit_address"`
-	WithdrawalsAddress   string  `json:"withdrawals_address"`
-	SpotTradeAddress     string  `json:"spot_trade_address"`
-	OrderCancelAddress   string  `json:"order_cancel_address"`
 	OrderEffectiveDigits int     `json:"order_effective_digits"`
 	MinOrderPrice        float64 `json:"min_order_price"`
-	MaxFeeBipsMax        int64   `json:"max_fee_bips_max"`
 	Timezone             string  `json:"timezone"`
 	ServerTime           int64   `json:"serverTime"`
-	OrderMaxVolume       string  `json:"order_max_volume"`
+	RateLimits           []*RateLimitFilter `json:"rateLimits"`
+}
+
+type RateLimitFilter struct {
+	Interval      string `json:"interval"`    // : "MINUTE"
+	IntervalNum   int    `json:"intervalNum"` // : 1
+	Limit         int    `json:"limit"`       // : 2400
+	RateLimitType string `json:"rateLimitType"`
 }
 
 type GasFeeResponse struct {

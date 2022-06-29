@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 1.1.0 - 2022-06-29
+### Added
+- ExchangeInfo add rateLimits
+
+
 ## 1.0.9 - 2022-06-29
 ### Added
 - GetTrades add fromId

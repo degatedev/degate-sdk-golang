@@ -124,6 +124,15 @@ func (c *Client) GetExchangeInfo() (response *binance.ExchangeInfoResponse, err 
 	return
 }
 
+func (c *Client) GetExchangeInfoInner() (response *model.ExchangeInfoResponse, err error) {
+	response = &model.ExchangeInfoResponse{}
+	err = c.Get("exchange/info", nil, nil, response)
+	if err != nil {
+		return
+	}
+	return
+}
+
 func (c *Client) GetPair(request *request.PairInfoRequest) (response *model.PairInfoResponse, err error) {
 	response = &model.PairInfoResponse{}
 	err = c.Get("pair", nil, request, response)

@@ -2,7 +2,6 @@ package spot
 
 import (
 	"errors"
-	"github.com/degatedev/degate-sdk-golang/degate/binance"
 	"github.com/shopspring/decimal"
 	"time"
 
@@ -64,8 +63,8 @@ func (c *Client) CheckEddsaSign() (err error) {
 
 func (c *Client) CheckChainId() (err error) {
 	if c.AppConfig.ChainId == 0 {
-		var response *binance.ExchangeInfoResponse
-		response, err = c.GetExchangeInfo()
+		var response *model.ExchangeInfoResponse
+		response, err = c.GetExchangeInfoInner()
 		if err != nil {
 			return
 		}
@@ -81,8 +80,8 @@ func (c *Client) CheckChainId() (err error) {
 
 func (c *Client) CheckExchangeAddress() (err error) {
 	if len(c.AppConfig.ExchangeAddress) == 0 {
-		var response *binance.ExchangeInfoResponse
-		response, err = c.GetExchangeInfo()
+		var response *model.ExchangeInfoResponse
+		response, err = c.GetExchangeInfoInner()
 		if err != nil {
 			return
 		}

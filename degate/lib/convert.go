@@ -434,17 +434,11 @@ func ConvertExchangeInfo(t *model.ExchangeInfo) (time *binance.ExchangeInfo) {
 	}
 	time = &binance.ExchangeInfo{
 		ChainID:              t.ChainID,
-		ExchangeAddress:      t.ExchangeAddress,
-		DepositAddress:       t.DepositAddress,
-		WithdrawalsAddress:   t.WithdrawalsAddress,
-		SpotTradeAddress:     t.SpotTradeAddress,
-		OrderCancelAddress:   t.OrderCancelAddress,
 		OrderEffectiveDigits: t.OrderEffectiveDigits,
 		MinOrderPrice:        t.MinOrderPrice,
-		MaxFeeBipsMax:        t.MaxFeeBipsMax,
 		Timezone:             t.Timezone,
 		ServerTime:           t.ServerTime,
-		OrderMaxVolume:       t.OrderMaxVolume,
+		RateLimits:           t.RateLimits,
 	}
 	return
 }

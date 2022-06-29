@@ -1,5 +1,7 @@
 package model
 
+import "github.com/degatedev/degate-sdk-golang/degate/binance"
+
 type TokenInfo struct {
 	Id              int    `json:"id"`
 	Chain           string `json:"chain"`
@@ -76,8 +78,8 @@ type ExchangeInfo struct {
 	OrderCancelAddress   string  `json:"order_cancel_address"`
 	OrderEffectiveDigits int     `json:"order_effective_digits"`
 	MinOrderPrice        float64 `json:"min_order_price"`
-	MaxFeeBipsMax        int64   `json:"max_fee_bips_max"`
 	Timezone             string  `json:"timezone"`
 	ServerTime           int64   `json:"server_time"`
 	OrderMaxVolume       string  `json:"order_max_volume"`
+	RateLimits           []*binance.RateLimitFilter `json:"rate_limits"`
 }
