@@ -22,15 +22,15 @@ type WithdrawalParam struct {
 }
 
 type TradesUserParam struct {
-	AccountId int64  `json:"account_id" form:"account_id"`
-	Token1    int64  `json:"token_1" form:"token_1"`
-	Token2    int64  `json:"token_2" form:"token_2"`
-	OrderID   string `json:"order_id" form:"order_id"`
-	Offset    int64  `json:"offset" form:"offset"`
-	Limit     int64  `json:"limit" form:"limit"`
-	Start     int64  `json:"start"  form:"start"`
-	End       int64  `json:"end" form:"end"`
-	FromId    int64
+	AccountId int64  `json:"account_id"`
+	Token1    int64  `json:"token_1"`
+	Token2    int64  `json:"token_2"`
+	OrderID   string `json:"order_id"`
+	Offset    int64  `json:"offset"`
+	Limit     int64  `json:"limit"`
+	Start     int64  `json:"start"`
+	End       int64  `json:"end"`
+	FromId    string `json:"from_id" `
 }
 
 type OrderDetailsParam struct {

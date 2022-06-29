@@ -60,12 +60,9 @@ func (c *WebSocketProtocol) connectSuccess() {
 	c.isClose = false
 	c.isDone = false
 	c.retryNum = 0
-	c.conn.SetCloseHandler(nil)
-	c.conn.SetPingHandler(nil)
-	c.conn.SetPongHandler(nil)
 	c.readMessage()
 	c.subscribeMessage()
-	c.pong()
+	//c.pong()
 }
 
 func (c *WebSocketProtocol) pong() {
@@ -178,22 +175,28 @@ func (c *WebSocketProtocol) readMessage() {
 				}
 				_, message, err := c.conn.ReadMessage()
 				if err != nil {
+					var reConnect bool
 					log.Error("websocket ReadMessage error: %v", err)
 					if e, ok := err.(*websocket.CloseError); ok {
-						if e.Code == websocket.CloseAbnormalClosure {
-							log.Error("websocket close err:[%v]. Retrying: %v", err, 1)
-							c.reconnect()
-							return
+						if e.Code == websocket.CloseAbnormalClosure || e.Code == websocket.CloseServiceRestart {
+							reConnect = true
 						}
+					} else if _, ok = err.(net.Error); ok {
+						reConnect = true
+					}
+
+					if reConnect {
+						log.Error("websocket connect Retrying: %v", 1)
+						c.reconnect()
+					} else {
 						msg := &binance.ErrorPayload{
 							M: err.Error(),
 						}
 						msg.E = "error"
 						cb, _ := json.Marshal(msg)
 						c.MessageProcess(cb)
-						return
 					}
-					continue
+					return
 				}
 				if len(message) > 0 {
 					log.Info("websocket ReadMessage message:%v", string(message))

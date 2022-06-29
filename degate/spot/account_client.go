@@ -872,6 +872,7 @@ func (c *Client) GetMyTrades(param *model.AccountTradesParam) (response *binance
 		End:       param.EndTime,
 		Limit:     param.Limit,
 		Offset:    param.Offset,
+		FromId:    param.FromId,
 	}
 	baseToken, quoteToken := conf.Conf.GetTokens(param.Symbol)
 	if baseToken == nil {

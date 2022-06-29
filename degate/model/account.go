@@ -154,6 +154,7 @@ type TransfersResponse struct {
 type AccountTradesParam struct {
 	Symbol    string
 	OrderId   string
+	FromId    string //tradeId
 	StartTime int64
 	EndTime   int64
 	Offset    int64

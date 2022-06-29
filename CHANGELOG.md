@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 1.0.9 - 2022-06-29
+### Added
+- GetTrades add fromId
+
+
 ## 1.0.8 - 2022-06-15
 ### Added
 - remove GetAllOrders, add GetHistoryOrders
