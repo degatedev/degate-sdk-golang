@@ -116,5 +116,5 @@ if err != nil {
     return
 }
 time.Sleep(time.Minute * 30)
-c.Stop()
+client.Stop()
 ```
