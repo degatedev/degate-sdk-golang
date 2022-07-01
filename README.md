@@ -52,7 +52,7 @@ The [spot testnet](https://testnet.degate.com/) is available. In order to test o
 
 ```php
 var appConfig = &conf.AppConfig{
-    "BaseUrl":"https://testnet.degate.com/",
+    BaseUrl:"https://testnet.degate.com/",
 }
 ```
 
