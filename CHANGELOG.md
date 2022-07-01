@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0 - 2022-07-01
+### Updated
+- update README.md
+
 
 ## 1.1.0 - 2022-06-29
 ### Added
@@ -56,4 +60,3 @@
 ## 1.0.0 - 2022-05-12
 ### Added
 - First release, please find details from README.md
-
