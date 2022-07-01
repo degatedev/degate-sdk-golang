@@ -1,5 +1,11 @@
 # Changelog
 
+
+## 1.2.1 - 2022-07-01
+### Updated
+- update README.md
+
+
 ## 1.2.0 - 2022-07-01
 ### Updated
 - update README.md
