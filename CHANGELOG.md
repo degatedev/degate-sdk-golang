@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 1.2.2 - 2022-07-12
+### Changed
+- AppPrivateKey changed to TradingKey
+
+
 ## 1.2.1 - 2022-07-01
 ### Updated
 - update README.md

@@ -7,17 +7,16 @@ import (
 	"github.com/degatedev/degate-sdk-golang/degate/lib"
 	"github.com/degatedev/degate-sdk-golang/degate/model"
 	"github.com/degatedev/degate-sdk-golang/degate/spot"
-	"github.com/degatedev/degate-sdk-golang/log"
 )
 
 func TestNewOrder(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:       0,
-		Symbol:   "ETH",
+		Id:     0,
+		Symbol: "ETH",
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:       8,
-		Symbol:   "USDC",
+		Id:     8,
+		Symbol: "USDC",
 	})
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
@@ -33,9 +32,9 @@ func TestNewOrder(t *testing.T) {
 		return
 	}
 	if r.Success() {
-		log.Print("NewOrder success \n %v", lib.String(r.Data))
+		t.Logf("success: %v", lib.String(r.Data))
 	} else {
-		log.Print("NewOrder fail: %v", lib.String(r))
+		t.Logf("fail: %v", lib.String(r))
 	}
 }
 
@@ -59,13 +58,13 @@ func TestPlaceOrder(t *testing.T) {
 		Price:    5000,
 	})
 	if err != nil {
-		log.Print("NewOrder error: %v", err)
+		t.Errorf("error: %v", err)
 		return
 	}
 	if r.Success() {
-		log.Print("NewOrder success \n %v", lib.String(r.Data))
+		t.Logf("success: %v", lib.String(r.Data))
 	} else {
-		log.Print("NewOrder fail: %v", lib.String(r))
+		t.Logf("fail: %v", lib.String(r))
 	}
 }
 
@@ -88,13 +87,13 @@ func TestMarketOrder(t *testing.T) {
 		Quantity: 0.05,
 	})
 	if err != nil {
-		log.Print("MarketOrder error: %v", err)
+		t.Errorf("error: %v", err)
 		return
 	}
 	if r.Success() {
-		log.Print("MarketOrder success \n %v", lib.String(r.Data))
+		t.Logf("success: %v", lib.String(r.Data))
 	} else {
-		log.Print("MarketOrder fail: %v", lib.String(r))
+		t.Logf("fail: %v", lib.String(r))
 	}
 }
 
@@ -102,16 +101,16 @@ func TestCancelOrder(t *testing.T) {
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
 	r, err := c.CancelOrder(&model.CancelOrderParam{
-		OrderId: "188759499725809833483796742269",
+		OrderId: "196120279748861022004248412422382",
 	})
 	if err != nil {
-		log.Print("CancelOrder error: %v", err)
+		t.Errorf("error: %v", err)
 		return
 	}
 	if r.Success() {
-		log.Print("CancelOrder success\n %v", lib.String(r.Data))
+		t.Logf("success: %v", lib.String(r.Data))
 	} else {
-		log.Print("CancelOrder fail: %v", lib.String(r))
+		t.Logf("fail: %v", lib.String(r))
 	}
 }
 
@@ -120,13 +119,13 @@ func TestCancelAllOrder(t *testing.T) {
 	c.SetAppConfig(appConfig)
 	r, err := c.CancelAllOrders(false)
 	if err != nil {
-		log.Print("CancelAllOrders error: %v", err)
+		t.Errorf("error: %v", err)
 		return
 	}
 	if r.Success() {
-		log.Print("CancelAllOrders success")
+		t.Logf("success")
 	} else {
-		log.Print("CancelAllOrders fail: %v", lib.String(r))
+		t.Logf("fail: %v", lib.String(r))
 	}
 }
 
@@ -137,12 +136,12 @@ func TestCancelOrderOnChain(t *testing.T) {
 		OrderId: "188820328196434284078497267922",
 	})
 	if err != nil {
-		log.Print("CancelOrderOnChain error: %v", err)
+		t.Errorf("error: %v", err)
 		return
 	}
 	if r.Success() {
-		log.Print("CancelOrderOnChain success\n %v", lib.String(r.Data))
+		t.Logf("success: %v", lib.String(r.Data))
 	} else {
-		log.Print("CancelOrderOnChain fail: %v", lib.String(r))
+		t.Logf("fail: %v", lib.String(r))
 	}
 }

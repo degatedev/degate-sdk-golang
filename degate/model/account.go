@@ -54,7 +54,7 @@ type AccountUpdateParam struct {
 
 type AccountCreateData struct {
 	Account
-	AppPrivateKey string
+	TradingKey string
 }
 
 type AccountCreateResponse struct {
@@ -64,7 +64,7 @@ type AccountCreateResponse struct {
 
 type AccountUpdateData struct {
 	Account
-	AppPrivateKey string
+	TradingKey string
 }
 
 type AccountUpdateResponse struct {

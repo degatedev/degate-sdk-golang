@@ -71,8 +71,8 @@ func (c *Client) CreateAccount(param *model.AccountCreateParam) (response *model
 		SignatureValidUntil: time.Now().Unix() + 60*60*24*60,
 		ReferrerId:          param.ReferrerId,
 	}
-	var appPrivateKey string
-	appPrivateKey, r.PublicKeyX, r.PublicKeyY, err = lib.CreateAppKey(param.PrivateKey, c.AppConfig.ExchangeAddress, uint(r.KeyNonce))
+	var tradingKey string
+	tradingKey, r.PublicKeyX, r.PublicKeyY, err = lib.CreateAppKey(param.PrivateKey, c.AppConfig.ExchangeAddress, uint(r.KeyNonce))
 	if err != nil {
 		return
 	}
@@ -84,21 +84,21 @@ func (c *Client) CreateAccount(param *model.AccountCreateParam) (response *model
 	response = &model.AccountCreateResponse{}
 	err = c.Post("account", nil, r, response)
 	if err == nil && response.Success() {
-		response.Data.AppPrivateKey = appPrivateKey
+		response.Data.TradingKey = tradingKey
 	}
 	return
 }
 
 func (c *Client) UpdateAccount(param *model.AccountUpdateParam) (response *model.AccountUpdateResponse, err error) {
 	var (
-		gasFeeSymbol  string
-		gasFee        *binance.GasFee
-		feeTokenId    uint32
-		feeVolume     = "0"
-		appPrivateKey string
-		accountId     uint32
-		nonce         int64
-		keyNonce      int64
+		gasFeeSymbol string
+		gasFee       *binance.GasFee
+		feeTokenId   uint32
+		feeVolume    = "0"
+		tradingKey   string
+		accountId    uint32
+		nonce        int64
+		keyNonce     int64
 	)
 
 	if err = c.CheckExchangeAddress(); err != nil {
@@ -186,7 +186,7 @@ func (c *Client) UpdateAccount(param *model.AccountUpdateParam) (response *model
 		MaxFeeTokenId:       feeTokenId,
 		MaxFeeVolume:        feeVolume,
 	}
-	appPrivateKey, r.PublicKeyX, r.PublicKeyY, err = lib.CreateAppKey(param.PrivateKey, c.AppConfig.ExchangeAddress, uint(r.KeyNonce))
+	tradingKey, r.PublicKeyX, r.PublicKeyY, err = lib.CreateAppKey(param.PrivateKey, c.AppConfig.ExchangeAddress, uint(r.KeyNonce))
 	if err != nil {
 		return
 	}
@@ -198,7 +198,7 @@ func (c *Client) UpdateAccount(param *model.AccountUpdateParam) (response *model
 	response = &model.AccountUpdateResponse{}
 	err = c.Put("account", nil, r, response)
 	if err == nil && response.Success() {
-		response.Data.AppPrivateKey = appPrivateKey
+		response.Data.TradingKey = tradingKey
 	}
 	return
 }
@@ -474,7 +474,7 @@ func (c *Client) Transfer(param *model.TransferParam) (response *binance.Transfe
 		c.AppConfig.ChainId); err != nil {
 		return
 	}
-	if r.EDDSASignature, err = lib.SignTransfer(c.AppConfig.AppPrivateKey, c.AppConfig.ExchangeAddress, r); err != nil {
+	if r.EDDSASignature, err = lib.SignTransfer(c.AppConfig.TradingKey, c.AppConfig.ExchangeAddress, r); err != nil {
 		return
 	}
 	res := &model.TransferResponse{}
@@ -622,7 +622,7 @@ func (c *Client) Withdraw(param *model.WithdrawParam) (response *binance.Withdra
 	r.StorageId = storageIdResponse.Data.StorageId
 	r.WithdrawID = storageIdResponse.Data.ID
 
-	if r.EDDSASignature, err = lib.SignWithdrawEddsa(c.AppConfig.AppPrivateKey, c.AppConfig.ExchangeAddress, r); err != nil {
+	if r.EDDSASignature, err = lib.SignWithdrawEddsa(c.AppConfig.TradingKey, c.AppConfig.ExchangeAddress, r); err != nil {
 		return
 	}
 	//ecdsa签名

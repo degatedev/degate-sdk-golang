@@ -234,7 +234,7 @@ func (c *Client) PlaceOrder(param *model.OrderParam) (response *binance.NewOrder
 	}
 	r.StorageId = storageIdResponse.Data.StorageId
 	r.OrderID = storageIdResponse.Data.ID
-	r.EDDSASignature, err = lib.SignOrderRequest(c.AppConfig.AppPrivateKey, c.AppConfig.ExchangeAddress, r)
+	r.EDDSASignature, err = lib.SignOrderRequest(c.AppConfig.TradingKey, c.AppConfig.ExchangeAddress, r)
 	if err != nil {
 		return
 	}
@@ -515,7 +515,7 @@ func (c *Client) MarketOrder(param *model.OrderParam) (response *binance.NewOrde
 	}
 	r.StorageId = storageIdResponse.Data.StorageId
 	r.OrderID = storageIdResponse.Data.ID
-	r.EDDSASignature, err = lib.SignOrderRequest(c.AppConfig.AppPrivateKey, c.AppConfig.ExchangeAddress, r)
+	r.EDDSASignature, err = lib.SignOrderRequest(c.AppConfig.TradingKey, c.AppConfig.ExchangeAddress, r)
 	if err != nil {
 		return
 	}
@@ -570,7 +570,7 @@ func (c *Client) CancelAllOrders(includeGrid bool) (response *binance.Response, 
 	if !includeGrid {
 		ig = 0
 	}
-	r.EDDSASignature, err = lib.SignCancelOrderNew(c.AppConfig.AppPrivateKey, c.AppConfig.ExchangeAddress,
+	r.EDDSASignature, err = lib.SignCancelOrderNew(c.AppConfig.TradingKey, c.AppConfig.ExchangeAddress,
 		uint64(c.AppConfig.AccountId), ig, "0", uint64(r.Timestamp))
 	if err != nil {
 		return
@@ -628,7 +628,7 @@ func (c *Client) CancelOrder(param *model.CancelOrderParam) (response *binance.O
 		},
 	}
 
-	r.EDDSASignature, err = lib.SignCancelOrderNew(c.AppConfig.AppPrivateKey, c.AppConfig.ExchangeAddress, uint64(c.AppConfig.AccountId), uint64(detail.Data.StorageID), r.FeeToken.Volume, r.FeeToken.TokenId)
+	r.EDDSASignature, err = lib.SignCancelOrderNew(c.AppConfig.TradingKey, c.AppConfig.ExchangeAddress, uint64(c.AppConfig.AccountId), uint64(detail.Data.StorageID), r.FeeToken.Volume, r.FeeToken.TokenId)
 	if err != nil {
 		return
 	}
@@ -734,7 +734,7 @@ func (c *Client) CancelOrderOnChain(param *model.CancelOrderParam) (response *bi
 		},
 	}
 
-	r.EDDSASignature, err = lib.SignCancelOrderNew(c.AppConfig.AppPrivateKey, c.AppConfig.ExchangeAddress, uint64(c.AppConfig.AccountId), uint64(detail.Data.StorageID), r.FeeToken.Volume, r.FeeToken.TokenId)
+	r.EDDSASignature, err = lib.SignCancelOrderNew(c.AppConfig.TradingKey, c.AppConfig.ExchangeAddress, uint64(c.AppConfig.AccountId), uint64(detail.Data.StorageID), r.FeeToken.Volume, r.FeeToken.TokenId)
 	if err != nil {
 		return
 	}
@@ -795,11 +795,29 @@ func (c *Client) GetStorageID(param *request.StorageIdRequest) (response *model.
 		Time:      time.Now().Unix(),
 		AccountId: param.AccountId,
 	}
-	if header.Signature, err = lib.SignHeader(c.AppConfig.AppPrivateKey, header.Owner, header.Time); err != nil {
+	if header.Signature, err = lib.SignHeader(c.AppConfig.TradingKey, header.Owner, header.Time); err != nil {
 		return
 	}
 	response = &model.StorageIdResponse{}
 	err = c.Get("storageId", header, param, response)
+	return
+}
+
+func (c *Client) GetBatchStorageID(param *request.StorageIdRequest) (response *model.BatchStorageIdResponse, err error) {
+	if !model.IsETHAddress(param.Owner) {
+		err = errors.New("illegal address")
+		return
+	}
+	header := &request.Header{
+		Owner:     param.Owner,
+		Time:      time.Now().Unix(),
+		AccountId: param.AccountId,
+	}
+	if header.Signature, err = lib.SignHeader(c.AppConfig.TradingKey, header.Owner, header.Time); err != nil {
+		return
+	}
+	response = &model.BatchStorageIdResponse{}
+	err = c.Get("batchStorageId", header, param, response)
 	return
 }
 

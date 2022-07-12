@@ -36,7 +36,7 @@ func (c *Client) SetAppConfig(config *conf.AppConfig) *Client {
 
 func (c *Client) GetHttpClient() *internal.HttpClient {
 	if c.httpClient == nil {
-		c.httpClient = internal.New(time.Duration(c.AppConfig.Timeout)*time.Second, 0.01,c.AppConfig.ShowHeader)
+		c.httpClient = internal.New(time.Duration(c.AppConfig.Timeout)*time.Second, 0.01, c.AppConfig.ShowHeader)
 	}
 	return c.httpClient
 }
@@ -46,8 +46,8 @@ func (c *Client) CheckEddsaSign() (err error) {
 		err = errors.New("illegal AccountAddress")
 		return
 	}
-	if len(c.AppConfig.AppPrivateKey) == 0 {
-		err = errors.New("AppPrivateKey is empty")
+	if len(c.AppConfig.TradingKey) == 0 {
+		err = errors.New("TradingKey is empty")
 		return
 	}
 	err = c.CheckExchangeAddress()
@@ -102,7 +102,7 @@ func (c *Client) GetHeaderSign() (header *request.Header, err error) {
 		Time:      time.Now().Unix(),
 		AccountId: c.AppConfig.AccountId,
 	}
-	if header.Signature, err = lib.SignHeader(c.AppConfig.AppPrivateKey, header.Owner, header.Time); err != nil {
+	if header.Signature, err = lib.SignHeader(c.AppConfig.TradingKey, header.Owner, header.Time); err != nil {
 		return
 	}
 	return

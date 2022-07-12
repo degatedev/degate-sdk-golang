@@ -122,9 +122,9 @@ func TestExchangeInfo(t *testing.T) {
 		return
 	}
 	if r.Success() {
-		log.Print("ExchangeInfo success\n: %v", lib.String(r.Data))
+		log.Print("success: %v", lib.String(r.Data))
 	} else {
-		log.Print("ExchangeInfo fail: %v", lib.String(r))
+		log.Print("fail: %v", lib.String(r))
 	}
 }
 

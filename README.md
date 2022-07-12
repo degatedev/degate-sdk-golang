@@ -30,7 +30,7 @@ client = &spot.Client{}
 var appConfig = &conf.AppConfig{
     AccountId: '<accountId>',
     AccountAddress: '<accountAddress>',
-    AppPrivateKey:'<appPrivateKey>',
+	TradingKey:'<DeGate TradingKey>',
 }
 client.SetAppConfig(appConfig)
 response,err := client.GetAccount()
@@ -104,7 +104,7 @@ conf.Conf.AddToken(&model.TokenInfo{
     Symbol:   "USDC",
 })
 client := &websocket.WebSocketClient{}
-client.Init(appConfig)
+client.Init(&conf.AppConfig{})
 err := client.SubscribeKline(&model.SubscribeKlineParam{
     Symbol:   "ETHUSDC",
     Interval: "1m",

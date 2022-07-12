@@ -78,7 +78,7 @@ type AppConfig struct {
 	Timeout          int
 	AccountId        uint32
 	AccountAddress   string
-	AppPrivateKey    string
+	TradingKey       string
 	EffectDigits     uint
 	EffectDecimals   uint
 	Tokens           []*model.TokenInfo

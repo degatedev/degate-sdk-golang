@@ -110,7 +110,7 @@ func SignUpdateAccount(privateKey string, owner, accountID string, feeTokenID ui
 
 func SignHeader(privateKey string, owner string, time int64) (s string, err error) {
 	if len(privateKey) == 0 {
-		err = errors.New("AppPrivatekey is empty")
+		err = errors.New("TradingKey is empty")
 		return
 	}
 	if !model.IsETHAddress(owner) {
@@ -135,7 +135,7 @@ func SignHeader(privateKey string, owner string, time int64) (s string, err erro
 
 func SignOrder(privateKey, exchange string, sellVol, buyVol, feeVol string, fillAmountBOrs bool, storageId, accountId, validUntil, sellTokenId, buyTokenId, feeTokenId uint64) (s string, err error) {
 	if len(privateKey) == 0 {
-		err = errors.New("AppPrivateKey is empty")
+		err = errors.New("TradingKey is empty")
 		return
 	}
 	if !model.IsETHAddress(exchange) {
@@ -208,7 +208,7 @@ func SignOrder(privateKey, exchange string, sellVol, buyVol, feeVol string, fill
 
 func SignOrderRequest(privateKey string, exchange string, r *model.DGOrderParam) (s string, err error) {
 	if len(privateKey) == 0 {
-		err = errors.New("AppPrivateKey is empty")
+		err = errors.New("TradingKey is empty")
 		return
 	}
 	if !model.IsETHAddress(exchange) {
@@ -282,7 +282,7 @@ func SignOrderRequest(privateKey string, exchange string, r *model.DGOrderParam)
 
 func SignCancelOrderNew(privateKey, exchange string, accountID, storageID uint64, gasMaxFee string, gasFeeTokenID uint64) (s string, err error) {
 	if len(privateKey) == 0 {
-		err = errors.New("no AppPrivateKey")
+		err = errors.New("no TradingKey")
 		return
 	}
 	var (
@@ -327,7 +327,7 @@ func SignCancelOrderNew(privateKey, exchange string, accountID, storageID uint64
 
 func SignCancelOrder(privateKey, exchange, owner string, accountID, tokenID, storageID uint64, gasMaxFee string, gasFeeTokenID uint64) (s string, err error) {
 	if len(privateKey) == 0 {
-		err = errors.New("no AppPrivateKey")
+		err = errors.New("no TradingKey")
 		return
 	}
 	var (
@@ -379,7 +379,7 @@ func SignCancelOrder(privateKey, exchange, owner string, accountID, tokenID, sto
 
 func SignTransfer(privateKey string, exchange string, r *request.TransferRequest) (s string, err error) {
 	if len(privateKey) == 0 {
-		err = errors.New("no AppPrivateKey")
+		err = errors.New("no TradingKey")
 		return
 	}
 	if !model.IsETHAddress(exchange) {
@@ -482,7 +482,7 @@ func SignTransferEcdsa(privateKey, owner, accountID, tokenID, amount, feeTokenID
 
 func SignWithdrawEddsa(privateKey string, exchange string, r *request.WithdrawRequest) (s string, err error) {
 	if len(privateKey) == 0 {
-		err = errors.New("no AppPrivateKey")
+		err = errors.New("no TradingKey")
 		return
 	}
 	if !model.IsETHAddress(exchange) {

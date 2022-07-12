@@ -52,7 +52,7 @@ func ConvertOrder(o *model.OrderList) (order *binance.Order) {
 		if o.FillAmountBOrs {
 			fv, _ := decimal.NewFromString(o.FilledBuyTokenVolume)
 			v, _ := decimal.NewFromString(o.BuyToken.Volume)
-			if fv.Equals(v) {
+			if fv.GreaterThanOrEqual(v) {
 				order.Status = "FILLED"
 			} else {
 				order.Status = "PARTIALLY_FILLED"
@@ -60,7 +60,7 @@ func ConvertOrder(o *model.OrderList) (order *binance.Order) {
 		} else {
 			fv, _ := decimal.NewFromString(o.FilledSellTokenVolume)
 			v, _ := decimal.NewFromString(o.SellToken.Volume)
-			if fv.Equal(v) {
+			if fv.GreaterThanOrEqual(v) {
 				order.Status = "FILLED"
 			} else {
 				order.Status = "PARTIALLY_FILLED"
@@ -146,12 +146,12 @@ func ConvertWithdraw(w *model.WithdrawalData) (withdraw *binance.WithdrawHistory
 		return
 	}
 	withdraw = &binance.WithdrawHistory{
-		Address:   w.ToAddress,
-		ApplyTime: FormatTime(w.UpdateTime),
-		Id:        w.WithdrawID,
+		Address:      w.ToAddress,
+		ApplyTime:    FormatTime(w.UpdateTime),
+		Id:           w.WithdrawID,
 		TransferType: 0,
 		TxId:         w.TxHash,
-		Network: "ETH",
+		Network:      "ETH",
 	}
 
 	if strings.EqualFold(w.Status, "PROCESSING") {
@@ -167,7 +167,7 @@ func ConvertWithdraw(w *model.WithdrawalData) (withdraw *binance.WithdrawHistory
 	}
 	if w.FeeToken != nil {
 		withdraw.TransactionFeeCoin = w.FeeToken.Symbol
-		withdraw.TransactionFee= GetAmountNew(w.FeeToken.Volume, w.FeeToken.Decimals)
+		withdraw.TransactionFee = GetAmountNew(w.FeeToken.Volume, w.FeeToken.Decimals)
 	}
 	return
 }
@@ -191,9 +191,9 @@ func ConvertDeposit(w *model.DepositData) (deposit *binance.DepositHistory, err 
 		return
 	}
 	deposit = &binance.DepositHistory{
-		Address:    w.Owner,
-		InsertTime: int(w.CreateTime * 1000),
-		Network:    "ETH",
+		Address:      w.Owner,
+		InsertTime:   int(w.CreateTime * 1000),
+		Network:      "ETH",
 		TransferType: 0,
 		TxId:         w.L2TrxID,
 		ConfirmTimes: "12/12",
@@ -537,7 +537,7 @@ func ConvertOrderTrade(quoteToken *model.TokenInfo, baseToken *model.TokenInfo, 
 		var fills []*binance.OrderFill
 		for _, trade := range trades {
 			fill := &binance.OrderFill{
-				Price:trade.Price,
+				Price: trade.Price,
 			}
 			fillSellA, _ := decimal.NewFromString(trade.FillSA)
 			fillSellB, _ := decimal.NewFromString(trade.FillSB)
@@ -790,7 +790,7 @@ func ConvertExecutionReportPayload(payload *model.ExecutionReportPayload) (p *bi
 		p.W = true
 	} else if strings.EqualFold(payload.U, "CANCELED") {
 		p.X1 = "CANCELED"
-	} else if strings.EqualFold(payload.U,"processing") {
+	} else if strings.EqualFold(payload.U, "processing") {
 		p.X1 = "PARTIALLY_FILLED"
 		p.W = true
 	} else if strings.EqualFold(payload.U, "COMPLETED") {
@@ -812,21 +812,21 @@ func ConvertExecutionReportPayload(payload *model.ExecutionReportPayload) (p *bi
 	}
 
 	var (
-		pow10       = decimal.NewFromInt(10)
-		baseVolume  string
-		quoteVolume string
-		baseFillVolume string
-		quoteFillVolume string
-		baseDec     decimal.Decimal
-		quoteDec    decimal.Decimal
-		feeVolume   decimal.Decimal
-		baseFillVolumeDec decimal.Decimal
+		pow10              = decimal.NewFromInt(10)
+		baseVolume         string
+		quoteVolume        string
+		baseFillVolume     string
+		quoteFillVolume    string
+		baseDec            decimal.Decimal
+		quoteDec           decimal.Decimal
+		feeVolume          decimal.Decimal
+		baseFillVolumeDec  decimal.Decimal
 		quoteFillVolumeDec decimal.Decimal
-		feeToken    *model.TokenInfo
-		sellToken   *model.TokenInfo
-		buyToken    *model.TokenInfo
-		baseToken   *model.TokenInfo
-		quoteToken  *model.TokenInfo
+		feeToken           *model.TokenInfo
+		sellToken          *model.TokenInfo
+		buyToken           *model.TokenInfo
+		baseToken          *model.TokenInfo
+		quoteToken         *model.TokenInfo
 	)
 
 	if feeToken = conf.Conf.GetTokenInfoById(payload.F); feeToken != nil {
@@ -985,12 +985,12 @@ func ConvertPairPrice(symbol map[uint64]string, t []*model.PairsPricesRes) (tick
 	if len(t) == 0 {
 		return
 	}
-	for _,p := range t {
+	for _, p := range t {
 		ticker := &binance.PairPrice{
 			Price:  p.Price,
 			Symbol: symbol[p.PairID],
 		}
-		tickers = append(tickers,ticker)
+		tickers = append(tickers, ticker)
 	}
 
 	return
@@ -1019,10 +1019,10 @@ func ConvertGasFeeToken(fees *binance.OffChainFee) (gasFee *binance.GasFeeToken)
 		return
 	}
 	gasFee = &binance.GasFeeToken{
-		WithdrawalGasFees:fees.WithdrawalGasFees,
-		WithdrawalOtherGasFees:fees.WithdrawalOtherGasFees,
-		TransferGasFees:fees.TransferGasFees,
-		TransferNoIDGasFees: fees.TransferNoIDGasFees,
+		WithdrawalGasFees:         fees.WithdrawalGasFees,
+		WithdrawalOtherGasFees:    fees.WithdrawalOtherGasFees,
+		TransferGasFees:           fees.TransferGasFees,
+		TransferNoIDGasFees:       fees.TransferNoIDGasFees,
 		OnChainCancelOrderGasFees: fees.OnChainCancelOrderGasFees,
 	}
 	return

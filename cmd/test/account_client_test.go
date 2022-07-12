@@ -144,7 +144,7 @@ func TestGetDeposits(t *testing.T) {
 	response, err := client.GetDeposits(&model.DepositsParam{
 		Coin:  "ETH",
 		Status: 1,
-		Limit: 10,
+		Limit:  10,
 	})
 
 	if err != nil {
@@ -167,8 +167,8 @@ func TestGetWithdraws(t *testing.T) {
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
 	response, err := client.GetWithdraws(&model.WithdrawsParam{
-		Coin: "ETH",
-		Status:6,
+		Coin:   "ETH",
+		Status: 6,
 	})
 	if err != nil {
 		t.Errorf("error: %v", err)
@@ -204,12 +204,12 @@ func TestGetTransfers(t *testing.T) {
 
 func TestGetMyTrades(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:       0,
-		Symbol:   "ETH",
+		Id:     0,
+		Symbol: "ETH",
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:       8,
-		Symbol:   "USDC",
+		Id:     8,
+		Symbol: "USDC",
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
@@ -232,7 +232,7 @@ func TestGetOrder(t *testing.T) {
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
 	_, r, err := c.GetOrder(&model.OrderDetailParam{
-		OrderId: "1297850191237108107827054903296",
+		OrderId: "585150965917735323899082571948",
 	})
 	if err != nil {
 		t.Errorf("error: %v", err)
@@ -247,18 +247,18 @@ func TestGetOrder(t *testing.T) {
 
 func TestGetHistoryOrders(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:       0,
-		Symbol:   "ETH",
+		Id:     0,
+		Symbol: "ETH",
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:       8,
-		Symbol:   "USDC",
+		Id:     8,
+		Symbol: "USDC",
 	})
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
 	r, err := c.GetHistoryOrders(&model.OrdersParam{
-		Symbol:    "ETHUSDC",
-		Limit: 20,
+		Symbol: "ETHUSDC",
+		Limit:  20,
 	})
 	if err != nil {
 		t.Errorf("error: %v", err)
@@ -273,12 +273,12 @@ func TestGetHistoryOrders(t *testing.T) {
 
 func TestGetOpenOrders(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:       0,
-		Symbol:   "ETH",
+		Id:     0,
+		Symbol: "ETH",
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:       8,
-		Symbol:   "USDC",
+		Id:     8,
+		Symbol: "USDC",
 	})
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
