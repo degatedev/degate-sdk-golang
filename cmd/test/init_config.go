@@ -6,8 +6,8 @@ import (
 )
 
 var appConfig = &conf.AppConfig{
-	AccountId:      2475,
-	AccountAddress: "0xBA2b5FEae299808b119FD410370D388B2fBF744b",
+	AccountId:      0,
+	AccountAddress: "",
 	TradingKey:     "",
 }
 

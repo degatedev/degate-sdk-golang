@@ -262,18 +262,11 @@ func LeInt2Buff32(n string) (buff [32]byte, err error) {
 	r.SetString(n, 10)
 	buff = [32]byte{}
 	for r.Cmp(big.NewInt(0)) > 0 && o < len(buff) {
-		c := r.Add(r, big.NewInt(255))
-		if o == 0 {
-			buff[o] = uint8(c.Int64()) + 1
-		} else {
-			buff[o] = uint8(c.Int64())
-		}
+		ss := big.NewInt(r.Int64())
+		c := ss.And(ss, big.NewInt(255))
+		buff[o] = uint8(c.Int64())
 		o++
 		r = r.Rsh(r, 8)
-	}
-	if r.Cmp(big.NewInt(0)) == 0 {
-		err = fmt.Errorf("error eddsa signature 0")
-		return
 	}
 	return
 }

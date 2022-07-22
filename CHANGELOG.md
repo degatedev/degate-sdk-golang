@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 1.3.0 - 2022-07-22
+### Updated
+- update create storage_id
+
+
 ## 1.2.2 - 2022-07-12
 ### Changed
 - AppPrivateKey changed to TradingKey

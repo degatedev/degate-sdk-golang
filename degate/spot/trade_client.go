@@ -800,6 +800,12 @@ func (c *Client) GetStorageID(param *request.StorageIdRequest) (response *model.
 	}
 	response = &model.StorageIdResponse{}
 	err = c.Get("storageId", header, param, response)
+	if err != nil {
+		return
+	}
+	if response.Success() {
+		response.Data.ID = lib.GenerateOrderId(param.AccountId, uint64(param.TokenId),response.Data.StorageId)
+	}
 	return
 }
 
@@ -818,6 +824,11 @@ func (c *Client) GetBatchStorageID(param *request.StorageIdRequest) (response *m
 	}
 	response = &model.BatchStorageIdResponse{}
 	err = c.Get("batchStorageId", header, param, response)
+	if response.Success() && len(response.Data) > 0 {
+		for _,s := range response.Data {
+			s.ID = lib.GenerateOrderId(param.AccountId, uint64(param.TokenId),s.StorageId)
+		}
+	}
 	return
 }
 

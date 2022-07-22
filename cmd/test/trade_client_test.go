@@ -25,7 +25,7 @@ func TestNewOrder(t *testing.T) {
 		Side:     "SELL",
 		Quantity: 0.1,
 		Price:    5000,
-		Type:     model.OrderTypeLimit,
+		Type:     model.OrderTypeMarket,
 	})
 	if err != nil {
 		t.Errorf("error: %v", err)

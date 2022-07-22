@@ -73,7 +73,7 @@ type BatchStorageIdResponse struct {
 }
 
 type StorageIdData struct {
-	ID        string `json:"id"`
+	ID        string `json:"-"`
 	StorageId uint64 `json:"storage_id"`
 }
 

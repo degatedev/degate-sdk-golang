@@ -117,7 +117,7 @@ func TestWithdraw(t *testing.T) {
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
 	response, err := client.Withdraw(&model.WithdrawParam{
-		Address:    "",
+		Address:    "0xBA2b5FEae299808b119FD410370D388B2fBF744b",
 		Coin:       "ETH",
 		Amount:     0.001,
 		PrivateKey: "",
@@ -142,7 +142,7 @@ func TestGetDeposits(t *testing.T) {
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
 	response, err := client.GetDeposits(&model.DepositsParam{
-		Coin:  "ETH",
+		Coin:   "ETH",
 		Status: 1,
 		Limit:  10,
 	})
@@ -161,8 +161,8 @@ func TestGetDeposits(t *testing.T) {
 
 func TestGetWithdraws(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:       0,
-		Symbol:   "ETH",
+		Id:     0,
+		Symbol: "ETH",
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
@@ -183,8 +183,8 @@ func TestGetWithdraws(t *testing.T) {
 
 func TestGetTransfers(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:       0,
-		Symbol:   "ETH",
+		Id:     0,
+		Symbol: "ETH",
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
