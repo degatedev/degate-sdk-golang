@@ -213,6 +213,10 @@ func (c *Client) PlaceOrder(param *model.OrderParam) (response *binance.NewOrder
 	if err != nil {
 		return
 	}
+	if !tickerRes.Success() || tickerRes.Data == nil {
+		err = errors.New("failed get taker fee")
+		return
+	}
 	r.FeeBips = tickerRes.Data.TakerFee
 
 	r.FeeToken = model.Token{

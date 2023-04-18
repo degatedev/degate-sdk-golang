@@ -69,7 +69,13 @@ type Order struct {
 
 type TradeResponse struct {
 	Response
-	Data []*Trade `json:"data"`
+	Data []*UserTrade `json:"data"`
+}
+
+type UserTrade struct {
+	Trade
+	BuyOrderId  string `json:"buy_order_id"`
+	SellOrderId string `json:"sell_order_id"`
 }
 
 type Trade struct {

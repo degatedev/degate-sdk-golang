@@ -42,8 +42,8 @@ func TestPlaceOrder(t *testing.T) {
 		Id:     0,
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:     3,
 		Symbol: "USDC",
+		Id:     2,
 	})
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)

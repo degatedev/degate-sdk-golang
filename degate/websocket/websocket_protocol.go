@@ -64,8 +64,8 @@ func (c *WebSocketProtocol) connectSuccess() {
 	c.isClose = false
 	c.isDone = false
 	c.retryNum = 0
-	c.readMessage()
-	c.subscribeMessage()
+	c.ReadMessage()
+	c.SubscribeMessage()
 	//c.pong()
 }
 
@@ -136,7 +136,7 @@ func (c *WebSocketProtocol) reconnect() {
 	}()
 }
 
-func (c *WebSocketProtocol) subscribeMessage() {
+func (c *WebSocketProtocol) SubscribeMessage() {
 	go func() {
 		var messages = c.subscribeMessages
 		for {
@@ -164,7 +164,7 @@ func (c *WebSocketProtocol) subscribeMessage() {
 
 }
 
-func (c *WebSocketProtocol) readMessage() {
+func (c *WebSocketProtocol) ReadMessage() {
 	ch := make(chan bool, 1)
 	c.closeCh = &ch
 	go func() {
@@ -178,6 +178,9 @@ func (c *WebSocketProtocol) readMessage() {
 					return
 				}
 				_, message, err := c.conn.ReadMessage()
+				if c.isClose || c.conn == nil {
+					return
+				}
 				if err != nil {
 					var reConnect bool
 					log.Error("websocket ReadMessage error: %v", err)
@@ -188,7 +191,9 @@ func (c *WebSocketProtocol) readMessage() {
 					} else if _, ok = err.(net.Error); ok {
 						reConnect = true
 					}
-
+					if c.isClose || c.conn == nil {
+						return
+					}
 					if reConnect {
 						log.Error("websocket connect Retrying: %v", 1)
 						c.reconnect()
@@ -263,4 +268,10 @@ func (c *WebSocketProtocol) Close() {
 func (c *WebSocketProtocol) Stop() {
 	c.isDone = true
 	c.Close()
+}
+
+func (c *WebSocketProtocol) SetConn(newConn *websocket.Conn) {
+	c.Close()
+	c.conn = newConn
+	c.connectSuccess()
 }

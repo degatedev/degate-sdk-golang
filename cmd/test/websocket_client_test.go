@@ -9,6 +9,7 @@ import (
 	"github.com/degatedev/degate-sdk-golang/degate/model"
 	"github.com/degatedev/degate-sdk-golang/degate/spot"
 	"github.com/degatedev/degate-sdk-golang/degate/websocket"
+	ws "github.com/gorilla/websocket"
 )
 
 func sleep() {
@@ -182,5 +183,40 @@ func TestUserDataWebscoket(t *testing.T) {
 	}, func(message string) {
 		log.Print(message)
 	})
+	sleep()
+}
+
+func TestSetConn(t *testing.T) {
+	sc := new(spot.Client)
+	sc.SetAppConfig(appConfig)
+	keyResponse, err := sc.NewListenKey()
+	if err != nil {
+		t.Errorf("%v", err)
+		return
+	}
+	if !keyResponse.Success() {
+		t.Logf("fail get listenKey code:%v message:%v", keyResponse.Code, keyResponse.Message)
+		return
+	}
+	c := websocket.WebSocketClient{}
+	c.Init(appConfig)
+
+	listenerKey := keyResponse.Data.ListenKey
+	messageHandle := func(message string) {
+		log.Print(message)
+	}
+
+	c.SubscribeUserData(&model.SubscribeUserDataParam{
+		ListenKey: listenerKey,
+	}, messageHandle)
+
+	time.Sleep(time.Second * 10)
+	log.Print("reset conn")
+	conn, _, err := ws.DefaultDialer.Dial(c.GetUrl()+"/"+listenerKey, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	c.SetConn(conn)
+
 	sleep()
 }

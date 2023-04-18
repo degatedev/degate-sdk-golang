@@ -12,7 +12,7 @@ import (
 
 var (
 	BaseUrl               = "https://testnet-backend.degate.com/"
-	WebsocketBaseUrl      = "wss://testnet-goerli-ws.degate.com/"
+	WebsocketBaseUrl      = "wss://testnet-ws.degate.com/"
 	OrderBookPath         = "order-book-api/"
 	WsPath                = "order-book-ws-api/"
 	EffectiveDigits       = 6

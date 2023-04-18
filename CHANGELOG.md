@@ -1,10 +1,5 @@
 # Changelog
 
-## 1.5.5 - 2023-04-03
-## Fixed
-- Fixed limit order
-
-
 ## 1.5.4 - 2023-03-16
 ## Updated
 - Update gas fee

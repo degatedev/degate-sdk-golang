@@ -65,6 +65,8 @@ type TradeData struct {
 	FillAmountBors    bool           `json:"fill_amount_bors"`
 	IsBuy             bool           `json:"is_buy"`
 	Price             string         `json:"price"`
+	SellOrderId       string         `json:"sell_order_id"`
+	BuyOrderId        string         `json:"buy_order_id"`
 }
 
 type TransferData struct {

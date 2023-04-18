@@ -271,8 +271,8 @@ func ConvertBalances(bs []*model.Balances) (balances []*binance.Balance, err err
 	return
 }
 
-func ConvertTrades(trades []*model.TradeData) (bTrades []*binance.Trade, err error) {
-	var bt *binance.Trade
+func ConvertTrades(trades []*model.TradeData) (bTrades []*binance.UserTrade, err error) {
+	var bt *binance.UserTrade
 	for _, t := range trades {
 		if t != nil {
 			if bt, err = ConvertTrade(t); err == nil && bt != nil {
@@ -283,11 +283,14 @@ func ConvertTrades(trades []*model.TradeData) (bTrades []*binance.Trade, err err
 	return
 }
 
-func ConvertTrade(t *model.TradeData) (trade *binance.Trade, err error) {
+func ConvertTrade(t *model.TradeData) (trade *binance.UserTrade, err error) {
 	if t == nil {
 		return
 	}
-	trade = &binance.Trade{}
+	trade = &binance.UserTrade{
+		BuyOrderId:  t.BuyOrderId,
+		SellOrderId: t.SellOrderId,
+	}
 	trade.Symbol = GetSymbol(t.FilledBuyToken, t.FilledSellToken, t.IsBuy)
 	trade.Id = t.TradeId
 	trade.PairId = t.PairId
