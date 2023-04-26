@@ -226,7 +226,7 @@ func SignOrder(privateKey, exchange string, sellVol, buyVol, feeVol string, fill
 	return
 }
 
-func SignOrderRequest(privateKey string, exchange string, r *model.DGOrderParam) (s string, err error) {
+func SignOrderRequest(privateKey string, exchange string, r *model.DGOrderParam, useTradeKey int64) (s string, err error) {
 	if len(privateKey) == 0 {
 		err = errors.New("AssetPrivateKey is empty")
 		return
@@ -277,7 +277,7 @@ func SignOrderRequest(privateKey string, exchange string, r *model.DGOrderParam)
 	gridOffsetBig, _ := new(big.Int).SetString("0", 10)
 	orderOffsetBig, _ := new(big.Int).SetString("0", 10)
 	maxLevelBig := new(big.Int).SetUint64(0)
-	userAppKey := new(big.Int).SetUint64(0)
+	userAppKey := new(big.Int).SetInt64(useTradeKey)
 
 	var inpBI []*big.Int
 	inpBI = append(inpBI, exchangeBig)

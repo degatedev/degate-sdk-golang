@@ -239,7 +239,7 @@ func (c *Client) PlaceOrder(param *model.OrderParam) (response *binance.NewOrder
 	}
 	r.StorageId = storageIdResponse.Data.StorageId
 	r.OrderID = storageIdResponse.Data.ID
-	r.EDDSASignature, err = lib.SignOrderRequest(c.AppConfig.AssetPrivateKey, c.AppConfig.ExchangeAddress, r)
+	r.EDDSASignature, err = lib.SignOrderRequest(c.AppConfig.AssetPrivateKey, c.AppConfig.ExchangeAddress, r, c.AppConfig.UseTradeKey)
 	if err != nil {
 		return
 	}
@@ -547,7 +547,7 @@ func (c *Client) MarketOrder(param *model.OrderParam) (response *binance.NewOrde
 	}
 	r.StorageId = storageIdResponse.Data.StorageId
 	r.OrderID = storageIdResponse.Data.ID
-	r.EDDSASignature, err = lib.SignOrderRequest(c.AppConfig.AssetPrivateKey, c.AppConfig.ExchangeAddress, r)
+	r.EDDSASignature, err = lib.SignOrderRequest(c.AppConfig.AssetPrivateKey, c.AppConfig.ExchangeAddress, r, c.AppConfig.UseTradeKey)
 	if err != nil {
 		return
 	}

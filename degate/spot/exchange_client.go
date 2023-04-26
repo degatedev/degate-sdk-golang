@@ -37,7 +37,7 @@ func (c *Client) GetGasFee() (response *binance.GasFeeResponse, err error) {
 	if err = model.Copy(response, &res.Response); err != nil {
 		return
 	}
-	if res.Success() {
+	if res.Success() && res.Data != nil {
 		var tokensInfo []*model.TokenInfo
 		ids := res.Data.GetTokenIds()
 		if len(ids) > 0 {

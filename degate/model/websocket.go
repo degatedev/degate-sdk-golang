@@ -215,6 +215,7 @@ type ExecutionReportPayload struct {
 	CloseTime        int64  `json:"C"`
 	UpdateTime       int64  `json:"d"`
 	Completed        bool   `json:"h"`
+	B1               bool   `json:"b"`
 }
 
 type SubscribeUserDataParam struct {

@@ -756,48 +756,54 @@ func ConvertExecutionReportPayload(payload *model.ExecutionReportPayload) (p *bi
 		p.Side = "SELL"
 	}
 	if payload.CancelReason == 1 {
-		p.CancelReason = "用户取消现货订单"
+		p.CancelReason = "cancellation of spot orders by user"
 	} else if payload.CancelReason == 2 {
-		p.CancelReason = "用户取消网格策略"
+		p.CancelReason = "cancellation of grid orders by user"
 	} else if payload.CancelReason == 3 {
-		p.CancelReason = "gas不足自动取消"
+		p.CancelReason = "insufficient gas auto-cancel"
 	} else if payload.CancelReason == 4 {
-		p.CancelReason = "订单剩余数量很小自动取消"
+		p.CancelReason = "orders with very small remaining quantities are automatically cancelled"
 	} else if payload.CancelReason == 5 {
-		p.CancelReason = "订单簿对手盘不足 "
+		p.CancelReason = "insufficient counterparties in the order book"
 	} else if payload.CancelReason == 6 {
-		p.CancelReason = "现货限价单过期"
+		p.CancelReason = "expired spot limit order"
 	} else if payload.CancelReason == 7 {
-		p.CancelReason = "网格策略过期"
+		p.CancelReason = "expired grid policy"
 	} else if payload.CancelReason == 8 {
-		p.CancelReason = "通过合约强制提现"
+		p.CancelReason = "forced withdrawal"
 	} else if payload.CancelReason == 9 {
-		p.CancelReason = "开始替换交易密钥"
+		p.CancelReason = "account updating"
 	} else if payload.CancelReason == 10 {
-		p.CancelReason = "网格策略由于挂单数量误差导致自动取消"
+		p.CancelReason = "grid strategies are cancelled due to quantity errors"
 	} else if payload.CancelReason == 11 {
-		p.CancelReason = "链上取消"
+		p.CancelReason = "cancel order on chain"
 	} else if payload.CancelReason == 12 {
-		p.CancelReason = "市价单价格保护"
+		p.CancelReason = "price protection triggered"
 	}
 
 	if strings.EqualFold(payload.Status, "OPEN") {
 		if len(payload.LastDealVolume) > 0 && payload.LastDealVolume != "0" {
+			p.X = "trade"
 			p.X1 = "PARTIALLY_FILLED"
 		} else {
 			p.X1 = "NEW"
 		}
-	} else if strings.EqualFold(payload.Status, "CANCELED") {
+	} else if payload.CancelReason == 3 || payload.CancelReason == 4 || payload.CancelReason == 5 || payload.CancelReason == 6 || payload.CancelReason == 7 || payload.CancelReason == 8 || payload.CancelReason == 9 || payload.CancelReason == 10 || payload.CancelReason == 12 {
+		p.X1 = "cancel"
+		p.X1 = "EXPIRED"
+	} else if strings.EqualFold(payload.Status, "CANCELED") || payload.CancelReason == 1 || payload.CancelReason == 2 || payload.CancelReason == 11 {
+		p.X = "cancel"
 		p.X1 = "CANCELED"
-		if payload.CancelReason == 6 || payload.CancelReason == 7 {
-			p.X1 = "EXPIRED"
-		}
 	} else if strings.EqualFold(payload.Status, "COMPLETED") {
+		p.X = "trade"
 		if payload.Completed {
 			p.X1 = "FILLED"
 		} else {
 			p.X1 = "PARTIALLY_FILLED"
 		}
+	} else if strings.EqualFold(payload.Status, "completedPart") {
+		p.X = "trade"
+		p.X1 = "PARTIALLY_FILLED"
 	} else {
 		p.X1 = strings.ToUpper(payload.Status)
 	}

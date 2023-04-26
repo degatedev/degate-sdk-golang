@@ -23,8 +23,8 @@ func TestNewOrder(t *testing.T) {
 	r, err := c.NewOrder(&model.OrderParam{
 		Symbol:   "ETHUSDC",
 		Side:     "sell",
-		Quantity: 0.1,
-		Price:    10000,
+		Quantity: 0.002,
+		Price:    100000,
 		Type:     model.OrderTypeLimit,
 	})
 	if err != nil {

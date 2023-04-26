@@ -1,6 +1,7 @@
 package spot
 
 import (
+	"encoding/json"
 	"errors"
 	"strings"
 	"time"
@@ -133,16 +134,8 @@ func (c *Client) Get(path string, header interface{}, params interface{}, respon
 	return c.GetByUrl(c.GetUrl(path), header, params, response)
 }
 
-func (c *Client) GetByUrl(url string, header interface{}, params interface{}, response interface{}) (err error) {
-	return c.GetHttpClient().GetJSON(url, header, params, response)
-}
-
 func (c *Client) Post(path string, header interface{}, params interface{}, response interface{}) (err error) {
 	return c.PostUrl(c.GetUrl(path), header, params, response)
-}
-
-func (c *Client) PostUrl(url string, header interface{}, params interface{}, response interface{}) (err error) {
-	return c.GetHttpClient().PostJSON(url, header, params, response)
 }
 
 func (c *Client) PostByAbsPath(path string, header interface{}, params interface{}, response interface{}) (err error) {
@@ -153,10 +146,6 @@ func (c *Client) Delete(path string, header interface{}, params interface{}, res
 	return c.DeleteUrl(c.GetUrl(path), header, params, response)
 }
 
-func (c *Client) DeleteUrl(url string, header interface{}, params interface{}, response interface{}) (err error) {
-	return c.GetHttpClient().DeleteJSON(url, header, params, response)
-}
-
 func (c *Client) DeleteByAbsPath(path string, header interface{}, params interface{}, response interface{}) (err error) {
 	return c.DeleteUrl(c.GetUrlByAbsPath(path), header, params, response)
 }
@@ -165,10 +154,50 @@ func (c *Client) Put(path string, header interface{}, params interface{}, respon
 	return c.PutUrl(c.GetUrl(path), header, params, response)
 }
 
-func (c *Client) PutUrl(url string, header interface{}, params interface{}, response interface{}) (err error) {
-	return c.GetHttpClient().PutJSON(url, header, params, response)
-}
-
 func (c *Client) PutByAbsPath(path string, header interface{}, params interface{}, response interface{}) (err error) {
 	return c.PutUrl(c.GetUrlByAbsPath(path), header, params, response)
+}
+
+func (c *Client) processHeader(header interface{}) (newHeader interface{}) {
+	if header == nil {
+		headerMap := map[string]interface{}{}
+		headerMap["use-trade-key"] = c.AppConfig.UseTradeKey
+		newHeader = headerMap
+		return
+	} else {
+		b, e := json.Marshal(header)
+		if e == nil {
+			var headerMap map[string]interface{}
+			e = json.Unmarshal(b, &headerMap)
+			if e == nil {
+				if _, ok := headerMap["use-trade-key"]; !ok {
+					headerMap["use-trade-key"] = c.AppConfig.UseTradeKey
+					newHeader = headerMap
+					return
+				}
+			}
+		}
+	}
+	newHeader = header
+	return
+}
+
+func (c *Client) GetByUrl(url string, header interface{}, params interface{}, response interface{}) (err error) {
+	header = c.processHeader(header)
+	return c.GetHttpClient().GetJSON(url, header, params, response)
+}
+
+func (c *Client) PostUrl(url string, header interface{}, params interface{}, response interface{}) (err error) {
+	header = c.processHeader(header)
+	return c.GetHttpClient().PostJSON(url, header, params, response)
+}
+
+func (c *Client) DeleteUrl(url string, header interface{}, params interface{}, response interface{}) (err error) {
+	header = c.processHeader(header)
+	return c.GetHttpClient().DeleteJSON(url, header, params, response)
+}
+
+func (c *Client) PutUrl(url string, header interface{}, params interface{}, response interface{}) (err error) {
+	header = c.processHeader(header)
+	return c.GetHttpClient().PutJSON(url, header, params, response)
 }

@@ -82,6 +82,7 @@ type AppConfig struct {
 	EffectDecimals   uint
 	Tokens           []*model.TokenInfo
 	ShowHeader       bool
+	UseTradeKey      int64
 }
 
 //export Config
