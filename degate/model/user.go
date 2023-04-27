@@ -67,6 +67,7 @@ type TradeData struct {
 	Price             string         `json:"price"`
 	SellOrderId       string         `json:"sell_order_id"`
 	BuyOrderId        string         `json:"buy_order_id"`
+	R                 int64          `json:"R"`
 }
 
 type TransferData struct {

@@ -203,8 +203,6 @@ func (c *WebSocketClient) HandlerMessage(message []byte) {
 			reportPayload  = &model.ExecutionReportPayload{}
 			bReportPayload *binance.ExecutionReportPayload
 		)
-		//ms := string(message)
-		//fmt.Println(ms)
 		err = json.Unmarshal(message, reportPayload)
 		if err != nil {
 			log.Error("error websocket HandlerMessage: %v", err)

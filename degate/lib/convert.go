@@ -315,6 +315,7 @@ func ConvertTrade(t *model.TradeData) (trade *binance.UserTrade, err error) {
 	trade.GasFee = GetAmountNew(t.FilledGasFeeToken.Volume, t.FilledGasFeeToken.Decimals)
 	trade.TradeFee = GetAmountNew(t.FilledFeeToken.Volume, t.FilledFeeToken.Decimals)
 	trade.AccountId = uint64(t.AccountID)
+	trade.R = t.R
 	return
 }
 

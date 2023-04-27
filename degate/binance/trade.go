@@ -100,4 +100,5 @@ type Trade struct {
 	TradeFee        string `json:"trade_fee"`
 	Status          int    `json:"status"`
 	ClientOrderId   string `json:"client_order_id"`
+	R               int64  `json:"R"`
 }
