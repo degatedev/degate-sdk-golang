@@ -1,11 +1,12 @@
 package test
 
 import (
+	"testing"
+
 	"github.com/degatedev/degate-sdk-golang/conf"
 	"github.com/degatedev/degate-sdk-golang/degate/lib"
 	"github.com/degatedev/degate-sdk-golang/degate/model"
 	"github.com/degatedev/degate-sdk-golang/degate/spot"
-	"testing"
 )
 
 func TestCreateAccount(t *testing.T) {
@@ -168,17 +169,17 @@ func TestTransferHistory(t *testing.T) {
 
 func TestMyTrades(t *testing.T) {
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:     0,
-		Symbol: "ETH",
+		Id:     45,
+		Symbol: "TESB",
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:     2,
-		Symbol: "USDC",
+		Id:     3,
+		Symbol: "USDT",
 	})
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)
 	response, err := client.MyTrades(&model.AccountTradesParam{
-		Symbol: "ETHUSDC",
+		Symbol: "TESBUSDT",
 	})
 	if err != nil {
 		t.Errorf("%v", err)

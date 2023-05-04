@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	message = "This signature creates a temporary Asset Key Pair for DeGate %s transactions, with no fees or blockchain transactions required.\\n\\nKey Nonce: \\n%d"
+	message = "This signature creates a temporary Asset Key Pair for DeGate %s transactions, with no fees or blockchain transactions required.\n\nKey Nonce: \n%d"
 )
 
 func CreateAppKey(privateKey string, baseUrl string, keyNonce uint) (secretKey string, publicKeyX string, publicKeyY string, err error) {
@@ -46,7 +46,7 @@ func CreateAppKey(privateKey string, baseUrl string, keyNonce uint) (secretKey s
 	} else if strings.Contains(baseUrl, "testnet") {
 		env = "Testnet"
 	} else {
-		env = "Mainnet"
+		env = "V1"
 	}
 	_, sign, err := signature.PrivateKeySign(privateKey, fmt.Sprintf(message, env, keyNonce))
 	if err != nil {

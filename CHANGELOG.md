@@ -1,5 +1,33 @@
 # Changelog
 
+## 1.5.9 - 2023-05-04
+## Updated
+Update mainnet base endpoint
+- https://mainnet-backend.degate.com
+- wss://mainnet-ws.degate.com
+
+
+## 1.5.8 - 2023-04-27
+## Fixed
+- fix bugs
+
+
+## 1.5.7 - 2023-04-26
+## Fixed
+- fix bugs
+
+
+## 1.5.6 - 2023-04-18
+## Updated
+update testnet ws base endpoint
+- wss://testnet-ws.degate.com
+
+
+## 1.5.5 - 2023-04-04
+## Fixed
+- fix bugs
+
+
 ## 1.5.4 - 2023-03-16
 ## Updated
 - Update gas fee
