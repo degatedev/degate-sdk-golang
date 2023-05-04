@@ -1,72 +1,83 @@
 # Changelog
 
+## 1.6.0 - 2023-05-04
+### Updated
+Update sdk docs link
+- https://api-docs.degate.com/spot
+
+
 ## 1.5.9 - 2023-05-04
-## Updated
+### Updated
 Update mainnet base endpoint
 - https://mainnet-backend.degate.com
 - wss://mainnet-ws.degate.com
 
 
 ## 1.5.8 - 2023-04-27
-## Fixed
+### Fixed
 - fix bugs
 
 
 ## 1.5.7 - 2023-04-26
-## Fixed
+### Fixed
 - fix bugs
 
 
 ## 1.5.6 - 2023-04-18
-## Updated
+### Updated
 update testnet ws base endpoint
 - wss://testnet-ws.degate.com
 
 
 ## 1.5.5 - 2023-04-04
-## Fixed
+### Fixed
 - fix bugs
 
 
 ## 1.5.4 - 2023-03-16
-## Updated
+### Updated
 - Update gas fee
 
 
 ## 1.5.3 - 2023-02-10
-## Updated
+### Updated
 - Update balanceUpdate Streams
 
 
 ## 1.5.2 - 2023-02-10
-## Updated
+### Updated
 - Update User Data Streams
 
 
 ## 1.5.1 - 2023-02-08
-## Updated
+### Updated
 - Update order sign
 
 
 ## 1.5.0 - 2023-01-18
-## Updated
+### Updated
 - Ticker24,TickerPrice response add pairId
 
+
 ## 1.4.9 - 2023-01-17
-## Fixed
+### Fixed
 - Fixed new market order failed
 
+
 ## 1.4.6 - 2023-01-12
-## Updated
+### Updated
 - ws accountTrade response add gasFee,tradeFee
 
+
 ## 1.4.5 - 2023-01-05
-## Updated
+### Updated
 - GetBalance response add tokenId
+
 
 ## 1.4.4 - 2022-12-20
 ### Updated
 - DepositHistory,GetOpenOrders,GetHistoryOrders,MyTrades
+
 
 ## 1.4.3 - 2022-10-26
 ### Updated
@@ -87,6 +98,7 @@ update testnet ws base endpoint
 ### Updated
 - update function name
 
+
 ## 1.3.2 - 2022-08-10
 ### Updated
 - withdraw,updateAccount max fee must greater than 0
@@ -103,7 +115,7 @@ update testnet ws base endpoint
 
 
 ## 1.2.2 - 2022-07-12
-### Changed
+### Updated
 - AppPrivateKey changed to TradingKey
 
 
