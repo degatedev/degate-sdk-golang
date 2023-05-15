@@ -44,6 +44,7 @@ func (c *Client) PlaceOrder(param *model.OrderParam) (response *binance.NewOrder
 		sellTokenBalance decimal.Decimal
 		feeTokenBalance  decimal.Decimal
 		pairInfo         *model.PairInfo
+		ok               bool
 	)
 
 	if err = c.CheckEddsaSign(); err != nil {
@@ -88,9 +89,13 @@ func (c *Client) PlaceOrder(param *model.OrderParam) (response *binance.NewOrder
 	}
 	price = decimal.NewFromFloat(param.Price)
 	if pairInfo.IsStable {
-		price = util.GetEffectivePriceRound(price, pairInfo.IsStable, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1)
+		ok = util.IsOrderEffectiveDigits(price, pairInfo.IsStable, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1, 0)
 	} else {
-		price = util.GetEffectivePriceRound(price, pairInfo.IsStable, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000)
+		ok = util.IsOrderEffectiveDigits(price, pairInfo.IsStable, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000, conf.OrderEffectiveDigitsLessThan1000)
+	}
+	if !ok {
+		err = errors.New("price is illegal")
+		return
 	}
 
 	baseDecimalDigits := int(baseToken.Decimals)
@@ -383,9 +388,9 @@ func (c *Client) MarketOrder(param *model.OrderParam) (response *binance.NewOrde
 			return
 		}
 		if pairInfo.IsStable {
-			price = util.GetEffectivePriceRound(price.Mul(conf.MarketOrderBuyAdjustment), pairInfo.IsStable, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1)
+			price = util.GetEffectivePriceRound(price.Mul(conf.MarketOrderBuyAdjustment), pairInfo.IsStable, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1, 0)
 		} else {
-			price = util.GetEffectivePriceRound(price.Mul(conf.MarketOrderBuyAdjustment), pairInfo.IsStable, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000)
+			price = util.GetEffectivePriceRound(price.Mul(conf.MarketOrderBuyAdjustment), pairInfo.IsStable, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000, conf.OrderEffectiveDigitsLessThan1000)
 		}
 		if param.Quantity > 0 {
 			quantity = util.GetEffectiveVolume(quantity, conf.EffectiveDigits, baseDecimalDigits, false)
@@ -400,9 +405,9 @@ func (c *Client) MarketOrder(param *model.OrderParam) (response *binance.NewOrde
 		}
 		fixPrice := quoteQuantity.DivRound(quantity, 32)
 		if pairInfo.IsStable {
-			price = util.GetEffectivePriceRound(fixPrice, pairInfo.IsStable, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1)
+			price = util.GetEffectivePriceRound(fixPrice, pairInfo.IsStable, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1, 0)
 		} else {
-			price = util.GetEffectivePriceRound(fixPrice, pairInfo.IsStable, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000)
+			price = util.GetEffectivePriceRound(fixPrice, pairInfo.IsStable, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000, conf.OrderEffectiveDigitsLessThan1000)
 		}
 		quoteQuantity = util.GetEffectiveVolume(quantity.Mul(price), conf.EffectiveDigits, quoteDecimalDigits, true)
 		quoteVolume = quoteQuantity.Mul(conf.Pow10.Pow(decimal.NewFromInt32(quoteToken.Decimals)))
@@ -416,9 +421,9 @@ func (c *Client) MarketOrder(param *model.OrderParam) (response *binance.NewOrde
 			return
 		}
 		if pairInfo.IsStable {
-			price = util.GetEffectivePriceRound(price.Mul(conf.MarketOrderSellAdjustment), pairInfo.IsStable, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1)
+			price = util.GetEffectivePriceRound(price.Mul(conf.MarketOrderSellAdjustment), pairInfo.IsStable, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1, 0)
 		} else {
-			price = util.GetEffectivePriceRound(price.Mul(conf.MarketOrderSellAdjustment), pairInfo.IsStable, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000)
+			price = util.GetEffectivePriceRound(price.Mul(conf.MarketOrderSellAdjustment), pairInfo.IsStable, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000, conf.OrderEffectiveDigitsLessThan1000)
 		}
 		if param.Quantity > 0 {
 			quantity = util.GetEffectiveVolume(quantity, conf.EffectiveDigits, baseDecimalDigits, true)
@@ -433,9 +438,9 @@ func (c *Client) MarketOrder(param *model.OrderParam) (response *binance.NewOrde
 		}
 		fixPrice := quoteQuantity.DivRound(quantity, 32)
 		if pairInfo.IsStable {
-			price = util.GetEffectivePriceRound(fixPrice, pairInfo.IsStable, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1)
+			price = util.GetEffectivePriceRound(fixPrice, pairInfo.IsStable, conf.OrderStabilityEffectiveDigitsGreaterThan1, conf.OrderStabilityEffectiveDigitsLessThan1, 0)
 		} else {
-			price = util.GetEffectivePriceRound(fixPrice, pairInfo.IsStable, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000)
+			price = util.GetEffectivePriceRound(fixPrice, pairInfo.IsStable, conf.OrderEffectiveDigitsGreaterThan10000, conf.OrderEffectiveDigitsLessThan10000, conf.OrderEffectiveDigitsLessThan1000)
 		}
 		quoteQuantity = util.GetEffectiveVolume(quantity.Mul(price), conf.EffectiveDigits, quoteDecimalDigits, false)
 		quoteVolume = quoteQuantity.Mul(conf.Pow10.Pow(decimal.NewFromInt32(quoteToken.Decimals)))

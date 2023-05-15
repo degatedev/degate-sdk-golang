@@ -1,5 +1,11 @@
 # Changelog
 
+
+## 1.6.1 - 2023-05-15
+### Updated
+- The price of place order is less than 1000, the effective digits are less than or equal to 4
+
+
 ## 1.6.0 - 2023-05-04
 ### Updated
 Update sdk docs link
