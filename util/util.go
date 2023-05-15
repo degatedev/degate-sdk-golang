@@ -1,9 +1,7 @@
 package util
 
 import (
-	"encoding/binary"
 	"github.com/degatedev/degate-sdk-golang/conf"
-	"math/big"
 	"regexp"
 	"strconv"
 	"strings"
@@ -14,16 +12,9 @@ import (
 var (
 	one                    = decimal.NewFromInt(1)
 	effectPointPrice       = decimal.NewFromInt(10000)
+	effect1000PointPrice   = decimal.NewFromInt(1000)
 	effectPointStablePrice = decimal.NewFromInt(1)
 )
-
-func TruncateLastDecimal(d decimal.Decimal) decimal.Decimal {
-	if d.Equal(decimal.NewFromBigInt(d.BigInt(), 0)) {
-		return d
-	}
-	s := d.String()
-	return d.Truncate(int32(len(s) - strings.Index(s, ".") - 2))
-}
 
 func ceil(d decimal.Decimal, places int32) decimal.Decimal {
 	t := d.Truncate(places)
@@ -101,122 +92,7 @@ func GetEffectiveVolume(v decimal.Decimal, effectiveDigits int, effectiveDecimal
 	return
 }
 
-// GetEffectiveDecimalVolume
-// Example: usdc decimals=6
-// v is 1 not 1*1e6
-func GetEffectiveDecimalVolume(v decimal.Decimal, decimalsDigits int32, isCeil bool) (volume decimal.Decimal) {
-	vBigInt, _ := decimal.NewFromString(v.BigInt().String())
-	if v.Equal(vBigInt) {
-		volume = v
-		return
-	}
-	d := v.Sub(vBigInt)
-	if isCeil {
-		volume = ceil(d, decimalsDigits)
-	} else {
-		volume = d.Truncate(decimalsDigits)
-	}
-	volume = vBigInt.Add(volume)
-	return
-}
-
-func GetEffectivePriceNew(p decimal.Decimal) (r decimal.Decimal) {
-	var (
-		ps     = p.String()
-		price  string
-		digits int
-		ds     string
-	)
-
-	if p.GreaterThanOrEqual(effectPointPrice) {
-		for _, s := range ps {
-			ds = string(s)
-			if ds == "." {
-				break
-			}
-			if digits != conf.OrderEffectiveDigitsGreaterThan10000 {
-				price = price + ds
-				digits++
-			} else {
-				price = price + "0"
-			}
-		}
-	} else {
-		for index, s := range ps {
-			ds = string(s)
-			if index == 0 && ds == "0" {
-				price = price + ds
-				continue
-			}
-			if ds == "." {
-				price = price + ds
-				continue
-			}
-			price = price + ds
-			if digits > 0 || ds != "0" {
-				digits++
-			}
-			if digits == conf.OrderEffectiveDigitsLessThan10000 {
-				break
-			}
-		}
-	}
-	r, _ = decimal.NewFromString(price)
-	return
-}
-
-func GetEffectivePriceStable(p decimal.Decimal) (r decimal.Decimal) {
-	var (
-		ps       = p.String()
-		price    string
-		digits   int
-		ds       string
-		hasPoint bool
-	)
-
-	if p.GreaterThanOrEqual(effectPointStablePrice) {
-		for _, s := range ps {
-			ds = string(s)
-			if ds == "." {
-				price = price + "."
-				hasPoint = true
-			} else if digits != conf.OrderStabilityEffectiveDigitsGreaterThan1 {
-				price = price + ds
-				digits++
-			} else if hasPoint {
-				break
-			} else {
-				price = price + "0"
-			}
-		}
-	} else {
-		for index, s := range ps {
-			ds = string(s)
-			if index == 0 && ds == "0" {
-				price = price + ds
-				continue
-			}
-			if ds == "." {
-				price = price + ds
-				continue
-			}
-			price = price + ds
-			if digits > 0 || ds != "0" {
-				digits++
-			}
-			if digits == conf.OrderStabilityEffectiveDigitsLessThan1 {
-				break
-			}
-		}
-	}
-	if strings.HasSuffix(price, ".") {
-		price = price[0 : len(price)-1]
-	}
-	r, _ = decimal.NewFromString(price)
-	return
-}
-
-func GetEffectivePriceRound(p decimal.Decimal, isStable bool, effectiveDigitsGreaterBigDigits int, effectiveDigitsGreaterSmallDigits int) (r decimal.Decimal) {
+func GetEffectivePriceRound(p decimal.Decimal, isStable bool, effectiveDigitsGreaterBigDigits int, effectiveDigitsGreaterSmallDigits int, effectiveLess1000Digits int) (r decimal.Decimal) {
 	var effectiveDigits int
 	if isStable {
 		if p.GreaterThanOrEqual(effectPointStablePrice) {
@@ -227,6 +103,8 @@ func GetEffectivePriceRound(p decimal.Decimal, isStable bool, effectiveDigitsGre
 	} else {
 		if p.GreaterThanOrEqual(effectPointPrice) {
 			effectiveDigits = effectiveDigitsGreaterBigDigits
+		} else if p.LessThanOrEqual(effect1000PointPrice) {
+			effectiveDigits = effectiveLess1000Digits
 		} else {
 			effectiveDigits = effectiveDigitsGreaterSmallDigits
 		}
@@ -244,57 +122,6 @@ func GetEffectivePriceRound(p decimal.Decimal, isStable bool, effectiveDigitsGre
 			}
 		}
 		r = p.Round(int32(e + effectiveDigits))
-	}
-	return
-}
-
-func CalculatePrice(quotaVolume1, baseVolume2 string, coefficient decimal.Decimal) (r decimal.Decimal) {
-	v1, _ := decimal.NewFromString(quotaVolume1)
-	v2, _ := decimal.NewFromString(baseVolume2)
-	p := v1.DivRound(v2, 32).Mul(coefficient)
-	if base, _ := decimal.NewFromString("1"); p.GreaterThanOrEqual(base) {
-		intSize := len(p.BigInt().String())
-		if intSize > 5 {
-			r = p.Round(int32(6 - intSize))
-		} else {
-			r = p.Round(int32(5 - intSize))
-		}
-	} else {
-		e := 0
-		for i, s := range p.String() {
-			if x, _ := strconv.Atoi(string(s)); i > 1 && x > 0 {
-				e = i - 2
-				break
-			}
-		}
-		r = p.Round(int32(e + 5))
-	}
-	return
-}
-
-func CalculatePriceStable(quotaVolume1, baseVolume2 string, coefficient decimal.Decimal, isStable bool) (r decimal.Decimal) {
-	v1, _ := decimal.NewFromString(quotaVolume1)
-	v2, _ := decimal.NewFromString(baseVolume2)
-	p := v1.DivRound(v2, 32).Mul(coefficient)
-	if p.GreaterThanOrEqual(effectPointPrice) && !isStable {
-		intSize := len(p.BigInt().String())
-		r = p.Round(int32(6 - intSize))
-	} else if p.GreaterThanOrEqual(effectPointStablePrice) {
-		intSize := len(p.BigInt().String())
-		r = p.Round(int32(5 - intSize))
-	} else {
-		e := 0
-		for i, s := range p.String() {
-			if x, _ := strconv.Atoi(string(s)); i > 1 && x > 0 {
-				e = i - 2
-				break
-			}
-		}
-		if isStable {
-			r = p.Round(int32(e + 4))
-		} else {
-			r = p.Round(int32(e + 5))
-		}
 	}
 	return
 }
@@ -318,12 +145,20 @@ func CalculateQuoteFeeVolume(v decimal.Decimal) (volume decimal.Decimal) {
 	return
 }
 
-func GetStorageIdFormOrderId(id string) (storageId uint32) {
-	i, b := new(big.Int).SetString(id, 10)
-	if b {
-		var a = make([]byte, 16)
-		i.FillBytes(a)
-		return binary.BigEndian.Uint32(a[12:16])
+func IsOrderEffectiveDigits(p decimal.Decimal, isStable bool, effectiveDigitsGreaterBigDigits int, effectiveDigitsGreaterSmallDigits int, effectiveLess1000Digits int) bool {
+	if isStable {
+		if p.GreaterThanOrEqual(effectPointStablePrice) {
+			return IsEffectiveDigits(p.String(), effectiveDigitsGreaterBigDigits)
+		} else {
+			return IsEffectiveDigits(p.String(), effectiveDigitsGreaterSmallDigits)
+		}
+	} else {
+		if p.GreaterThanOrEqual(effectPointPrice) {
+			return IsEffectiveDigits(p.String(), effectiveDigitsGreaterBigDigits)
+		} else if p.LessThanOrEqual(effect1000PointPrice) {
+			return IsEffectiveDigits(p.String(), effectiveLess1000Digits)
+		} else {
+			return IsEffectiveDigits(p.String(), effectiveDigitsGreaterSmallDigits)
+		}
 	}
-	return
 }

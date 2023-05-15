@@ -22,10 +22,9 @@ func TestNewOrder(t *testing.T) {
 	c.SetAppConfig(appConfig)
 	r, err := c.NewOrder(&model.OrderParam{
 		Symbol:   "ETHUSDC",
-		Side:     "sell",
-		Quantity: 0.002,
-		Price:    100000,
-		Type:     model.OrderTypeLimit,
+		Side:     "buy",
+		Quantity: 0.1,
+		Type:     model.OrderTypeMarket,
 	})
 	if err != nil {
 		t.Errorf("%v", err)

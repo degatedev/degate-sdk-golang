@@ -53,6 +53,7 @@ var (
 	MinGas                                    = "10"
 	OrderEffectiveDigitsGreaterThan10000      = 6
 	OrderEffectiveDigitsLessThan10000         = 5
+	OrderEffectiveDigitsLessThan1000          = 4
 	OrderStabilityEffectiveDigitsGreaterThan1 = 5
 	OrderStabilityEffectiveDigitsLessThan1    = 4
 	TransferEffectiveDigits                   = 7
