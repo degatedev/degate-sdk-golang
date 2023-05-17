@@ -306,7 +306,7 @@ func SignOrderRequest(privateKey string, exchange string, r *model.DGOrderParam,
 	return
 }
 
-func SignCancelOrderNew(privateKey, exchange string, accountID, storageID uint64, gasMaxFee string, gasFeeTokenID uint64) (s string, err error) {
+func SignCancelOrderNew(privateKey, exchange string, accountID, storageID uint64, gasMaxFee string, gasFeeTokenID uint64, useTradeKey int64) (s string, err error) {
 	if len(privateKey) == 0 {
 		err = errors.New("no AssetPrivateKey")
 		return
@@ -317,7 +317,7 @@ func SignCancelOrderNew(privateKey, exchange string, accountID, storageID uint64
 		storageIDBig     = new(big.Int)
 		gasMaxFeeBig     = new(big.Int)
 		gasFeeTokenIDBig = new(big.Int)
-		useAppKeyBig     = new(big.Int).SetUint64(0)
+		useAppKeyBig     = new(big.Int).SetInt64(useTradeKey)
 		isBig            bool
 	)
 

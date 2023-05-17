@@ -194,7 +194,7 @@ func TestGetOrder(t *testing.T) {
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
 	_, r, err := c.GetOrder(&model.OrderDetailParam{
-		OrderId: "585150965917735323899082571948",
+		OrderId: "113644221776254868476966985531396",
 	})
 	if err != nil {
 		t.Errorf("%v", err)

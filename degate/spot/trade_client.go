@@ -609,7 +609,7 @@ func (c *Client) CancelOpenOrders(includeGrid bool) (response *binance.Response,
 		ig = 0
 	}
 	r.EDDSASignature, err = lib.SignCancelOrderNew(c.AppConfig.AssetPrivateKey, c.AppConfig.ExchangeAddress,
-		uint64(c.AppConfig.AccountId), ig, "0", uint64(r.Timestamp))
+		uint64(c.AppConfig.AccountId), ig, "0", uint64(r.Timestamp), c.AppConfig.UseTradeKey)
 	if err != nil {
 		return
 	}
@@ -666,7 +666,7 @@ func (c *Client) CancelOrder(param *model.CancelOrderParam) (response *binance.O
 		},
 	}
 
-	r.EDDSASignature, err = lib.SignCancelOrderNew(c.AppConfig.AssetPrivateKey, c.AppConfig.ExchangeAddress, uint64(c.AppConfig.AccountId), uint64(detail.Data.StorageID), r.FeeToken.Volume, r.FeeToken.TokenId)
+	r.EDDSASignature, err = lib.SignCancelOrderNew(c.AppConfig.AssetPrivateKey, c.AppConfig.ExchangeAddress, uint64(c.AppConfig.AccountId), uint64(detail.Data.StorageID), r.FeeToken.Volume, r.FeeToken.TokenId, c.AppConfig.UseTradeKey)
 	if err != nil {
 		return
 	}
@@ -772,7 +772,7 @@ func (c *Client) CancelOrderOnChain(param *model.CancelOrderParam) (response *bi
 		},
 	}
 
-	r.EDDSASignature, err = lib.SignCancelOrderNew(c.AppConfig.AssetPrivateKey, c.AppConfig.ExchangeAddress, uint64(c.AppConfig.AccountId), uint64(detail.Data.StorageID), r.FeeToken.Volume, r.FeeToken.TokenId)
+	r.EDDSASignature, err = lib.SignCancelOrderNew(c.AppConfig.AssetPrivateKey, c.AppConfig.ExchangeAddress, uint64(c.AppConfig.AccountId), uint64(detail.Data.StorageID), r.FeeToken.Volume, r.FeeToken.TokenId, c.AppConfig.UseTradeKey)
 	if err != nil {
 		return
 	}
