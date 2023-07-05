@@ -141,7 +141,6 @@ func CalculateQuoteFeeVolume(v decimal.Decimal) (volume decimal.Decimal) {
 		result += re.ReplaceAllString(vs[index+1:], "0")
 	}
 	volume, _ = decimal.NewFromString(result)
-	volume = decimal.Max(volume, conf.MinFeeVolume)
 	return
 }
 

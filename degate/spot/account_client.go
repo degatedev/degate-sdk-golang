@@ -695,9 +695,9 @@ func (c *Client) Withdraw(param *model.WithdrawParam) (response *binance.Withdra
 	if err = model.Copy(response, &res.Response); err != nil {
 		return
 	}
-	if res.Data != nil {
+	if res.Success() {
 		response.Data = &binance.WithdrawData{
-			Id: res.Data.OrderID,
+			Id: r.WithdrawID,
 		}
 	}
 	return

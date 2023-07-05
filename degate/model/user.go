@@ -84,10 +84,7 @@ type PriceData struct {
 }
 
 type InitiateWithdrawal struct {
-	Hash         string `json:"hash"`
-	OrderID      string `json:"order_id"`
-	Status       string `json:"status"`
-	IsIdempotent bool   `json:"is_idempotent"`
+	Status string `json:"status"`
 }
 
 type OffChainFee struct {

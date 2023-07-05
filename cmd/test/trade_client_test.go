@@ -42,15 +42,15 @@ func TestPlaceOrder(t *testing.T) {
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
 		Symbol: "USDC",
-		Id:     2,
+		Id:     9,
 	})
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
 	r, err := c.PlaceOrder(&model.OrderParam{
 		Symbol:   "ETHUSDC",
 		Side:     "buy",
-		Quantity: 0.01688,
-		Price:    2962,
+		Quantity: 0.1,
+		Price:    1900,
 	})
 	if err != nil {
 		t.Errorf("%v", err)

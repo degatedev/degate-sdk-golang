@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 1.6.3 - 2023-07-05
+### Fixed
+- fix place order gas fee
+
+
 ## 1.6.2 - 2023-05-17
 ### Updated
 - update sign of cancel order request

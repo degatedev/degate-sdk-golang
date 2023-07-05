@@ -46,7 +46,6 @@ var (
 	OrderMaxVolume                            = decimal.NewFromInt(10).Pow(decimal.NewFromInt(28))
 	Pow10                                     = decimal.NewFromInt(10)
 	Zero                                      = decimal.NewFromInt(0)
-	MinFeeVolume                              = decimal.NewFromFloat(0.3)
 	MarketOrderBuyAdjustment                  = decimal.NewFromFloat(1.1)
 	MarketOrderSellAdjustment                 = decimal.NewFromFloat(0.9)
 	GasFeeSymbol                              = "ETH"
