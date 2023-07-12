@@ -20,11 +20,11 @@ type ExchangeInfoResponse struct {
 }
 
 type ExchangeInfo struct {
-	ChainID       int64              `json:"chain_id"`
-	MinOrderPrice float64            `json:"min_order_price"`
-	Timezone      string             `json:"timezone"`
-	ServerTime    int64              `json:"serverTime"`
-	RateLimits    []*RateLimitFilter `json:"rateLimits"`
+	ChainID               int64              `json:"chain_id"`
+	Timezone              string             `json:"timezone"`
+	ServerTime            int64              `json:"serverTime"`
+	RateLimits            []*RateLimitFilter `json:"rateLimits"`
+	MinLimitOrderUSDValue float64            `json:"minLimitOrderUSDValue"`
 }
 
 type RateLimitFilter struct {

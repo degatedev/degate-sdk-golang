@@ -71,16 +71,16 @@ type BookTicker struct {
 }
 
 type ExchangeInfo struct {
-	ChainID              int64                      `json:"chain_id"`
-	ExchangeAddress      string                     `json:"exchange_address"`
-	DepositAddress       string                     `json:"deposit_address"`
-	WithdrawalsAddress   string                     `json:"withdrawals_address"`
-	SpotTradeAddress     string                     `json:"spot_trade_address"`
-	OrderCancelAddress   string                     `json:"order_cancel_address"`
-	OrderEffectiveDigits int                        `json:"order_effective_digits"`
-	MinOrderPrice        float64                    `json:"min_order_price"`
-	Timezone             string                     `json:"timezone"`
-	ServerTime           int64                      `json:"server_time"`
-	OrderMaxVolume       string                     `json:"order_max_volume"`
-	RateLimits           []*binance.RateLimitFilter `json:"rate_limits"`
+	ChainID               int64                      `json:"chain_id"`
+	ExchangeAddress       string                     `json:"exchange_address"`
+	DepositAddress        string                     `json:"deposit_address"`
+	WithdrawalsAddress    string                     `json:"withdrawals_address"`
+	SpotTradeAddress      string                     `json:"spot_trade_address"`
+	OrderCancelAddress    string                     `json:"order_cancel_address"`
+	OrderEffectiveDigits  int                        `json:"order_effective_digits"`
+	Timezone              string                     `json:"timezone"`
+	ServerTime            int64                      `json:"server_time"`
+	OrderMaxVolume        string                     `json:"order_max_volume"`
+	RateLimits            []*binance.RateLimitFilter `json:"rate_limits"`
+	MinLimitOrderUSDValue float64                    `json:"min_limit_order_usd_value"`
 }
