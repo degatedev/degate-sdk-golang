@@ -2,17 +2,18 @@ package conf
 
 import (
 	"fmt"
-	"github.com/shopspring/decimal"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/shopspring/decimal"
 
 	"github.com/degatedev/degate-sdk-golang/degate/model"
 )
 
 var (
-	BaseUrl               = "https://mainnet-backend.degate.com"
-	WebsocketBaseUrl      = "wss://mainnet-ws.degate.com"
+	BaseUrl               = "https://v1-mainnet-backend.degate.com"
+	WebsocketBaseUrl      = "wss://v1-mainnet-ws.degate.com"
 	OrderBookPath         = "order-book-api/"
 	WsPath                = "order-book-ws-api/"
 	EffectiveDigits       = 6
@@ -69,20 +70,22 @@ func GetInterval(interval int) string {
 
 //export AppConfig
 type AppConfig struct {
-	Debug            bool
-	BaseUrl          string
-	WebsocketBaseUrl string
-	ExchangeAddress  string
-	ChainId          int64
-	Timeout          int
-	AccountId        uint32
-	AccountAddress   string
-	AssetPrivateKey  string
-	EffectDigits     uint
-	EffectDecimals   uint
-	Tokens           []*model.TokenInfo
-	ShowHeader       bool
-	UseTradeKey      int64
+	Debug                 bool
+	BaseUrl               string
+	WebsocketBaseUrl      string
+	ExchangeAddress       string
+	ChainId               int64
+	Timeout               int
+	AccountId             uint32
+	AccountAddress        string
+	AssetPrivateKey       string
+	EffectDigits          uint
+	EffectDecimals        uint
+	Tokens                []*model.TokenInfo
+	ShowHeader            bool
+	UseTradeKey           int64
+	AccessToken           string
+	AccessTokenExpireTime int64
 }
 
 //export Config

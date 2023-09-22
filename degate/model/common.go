@@ -27,3 +27,15 @@ type TokensResponse struct {
 	binance.Response
 	Data []*TokenInfo `json:"data"`
 }
+
+type AccessTokenParam struct {
+	Owner          string `json:"owner" form:"owner" binding:"required"`
+	Time           int64  `json:"time" form:"time" binding:"required"`
+	EDDSASignature string `json:"eddsa_signature" form:"eddsa_signature"`
+	UseTradeKey    bool   `json:"use_trade_key" form:"use_trade_key"`
+}
+
+type AccessTokenResponse struct {
+	binance.Response
+	Data *AccessToken `json:"data"`
+}
