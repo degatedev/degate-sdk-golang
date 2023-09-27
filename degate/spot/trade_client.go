@@ -833,7 +833,7 @@ func (c *Client) GetStorageID(param *request.StorageIdRequest) (response *model.
 		Time:      time.Now().Unix(),
 		AccountId: param.AccountId,
 	}
-	if header.Signature, err = lib.SignHeader(c.AppConfig.AssetPrivateKey, header.Owner, header.Time); err != nil {
+	if header.Authorization, _, err = c.GetAccessToken(); err != nil {
 		return
 	}
 	response = &model.StorageIdResponse{}
@@ -857,7 +857,7 @@ func (c *Client) GetBatchStorageID(param *request.StorageIdRequest) (response *m
 		Time:      time.Now().Unix(),
 		AccountId: param.AccountId,
 	}
-	if header.Signature, err = lib.SignHeader(c.AppConfig.AssetPrivateKey, header.Owner, header.Time); err != nil {
+	if header.Authorization, _, err = c.GetAccessToken(); err != nil {
 		return
 	}
 	response = &model.BatchStorageIdResponse{}

@@ -1,11 +1,13 @@
 package test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/degatedev/degate-sdk-golang/conf"
 	"github.com/degatedev/degate-sdk-golang/degate/lib"
 	"github.com/degatedev/degate-sdk-golang/degate/model"
+	"github.com/degatedev/degate-sdk-golang/degate/request"
 	"github.com/degatedev/degate-sdk-golang/degate/spot"
 )
 
@@ -53,6 +55,36 @@ func TestAccount(t *testing.T) {
 	}
 }
 
+func TestAccessToken(t *testing.T) {
+	client := new(spot.Client)
+	client.SetAppConfig(appConfig)
+	token, exp, err := client.GetAccessToken()
+	if err != nil {
+		t.Errorf("%v", err)
+	} else {
+		t.Logf("%v-%v", token, exp)
+	}
+}
+
+func TestGetStorageId(t *testing.T) {
+	client := new(spot.Client)
+	client.SetAppConfig(appConfig)
+	storageIdResponse, err := client.GetStorageID(&request.StorageIdRequest{
+		Owner:     client.AppConfig.AccountAddress,
+		AccountId: client.AppConfig.AccountId,
+		TokenId:   0,
+		Window:    1,
+	})
+	if err != nil {
+		t.Errorf("%v", err)
+		return
+	}
+	if storageIdResponse != nil && !storageIdResponse.Success() {
+		err = errors.New("error get storageId")
+		t.Errorf("%v", err)
+		return
+	}
+}
 func TestGetBalance(t *testing.T) {
 	client := new(spot.Client)
 	client.SetAppConfig(appConfig)

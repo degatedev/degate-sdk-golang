@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.5 - 2023-09-22
+### Updated 
+- Replace signature with access-token 
+
 ## 1.6.4 - 2023-07-12
 ### Updated 
 - Replace minOrderPrice with minLimitOrderUSDValue in exchange info
@@ -197,7 +201,7 @@ Update testnet ws base endpoint
 
 ## 1.0.1 - 2022-05-25
 ### Fixed
-- getAccount function return error when AccountId is 0
+- GetAccount function return error when AccountId is 0
 
 
 ## 1.0.0 - 2022-05-12

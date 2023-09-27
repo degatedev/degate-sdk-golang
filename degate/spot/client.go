@@ -104,8 +104,42 @@ func (c *Client) GetHeaderSign() (header *request.Header, err error) {
 		Time:      time.Now().Unix(),
 		AccountId: c.AppConfig.AccountId,
 	}
-	if header.Signature, err = lib.SignHeader(c.AppConfig.AssetPrivateKey, header.Owner, header.Time); err != nil {
+	if header.Authorization, _, err = c.GetAccessToken(); err != nil {
 		return
+	}
+	return
+}
+
+func (c *Client) GetAccessToken() (token string, exp int64, err error) {
+	if len(c.AppConfig.AccessToken) != 0 {
+		exp = c.AppConfig.AccessTokenExpireTime
+		if exp-int64(time.Hour)*24 > time.Now().Unix() {
+			token = c.AppConfig.AccessToken
+			return
+		}
+	}
+	var signature string
+	var t = time.Now()
+	if signature, err = lib.SignHeader(c.AppConfig.AssetPrivateKey, c.AppConfig.AccountAddress, t.UnixMilli()); err != nil {
+		return
+	}
+	req := &model.AccessTokenParam{
+		Owner:          c.AppConfig.AccountAddress,
+		EDDSASignature: signature,
+		Time:           t.UnixMilli(),
+		UseTradeKey:    c.AppConfig.UseTradeKey == 1,
+	}
+	res := &model.AccessTokenResponse{}
+	err = c.Post("access/token", nil, req, res)
+	if err != nil {
+		return
+	}
+
+	if res.Success() && res.Data != nil {
+		token = "Bearer " + res.Data.Token
+		exp = res.Data.Expire
+		c.AppConfig.AccessToken = token
+		c.AppConfig.AccessTokenExpireTime = res.Data.Expire
 	}
 	return
 }
