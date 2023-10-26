@@ -92,7 +92,7 @@ func GetEffectiveVolume(v decimal.Decimal, effectiveDigits int, effectiveDecimal
 	return
 }
 
-func GetEffectivePriceRound(p decimal.Decimal, isStable bool, effectiveDigitsGreaterBigDigits int, effectiveDigitsGreaterSmallDigits int, effectiveLess1000Digits int) (r decimal.Decimal) {
+func GetEffectivePriceRound(p decimal.Decimal, isStable bool, effectiveDigitsGreaterBigDigits int, effectiveDigitsGreaterSmallDigits int, effectiveLess1000Digits int, isBuy bool) (r decimal.Decimal) {
 	var effectiveDigits int
 	if isStable {
 		if p.GreaterThanOrEqual(effectPointStablePrice) {
@@ -110,9 +110,10 @@ func GetEffectivePriceRound(p decimal.Decimal, isStable bool, effectiveDigitsGre
 		}
 	}
 
+	var roundPlaces int32
 	if p.GreaterThanOrEqual(one) {
 		intSize := len(p.BigInt().String())
-		r = p.Round(int32(effectiveDigits - intSize))
+		roundPlaces = int32(effectiveDigits - intSize)
 	} else {
 		e := 0
 		for i, s := range p.String() {
@@ -121,8 +122,14 @@ func GetEffectivePriceRound(p decimal.Decimal, isStable bool, effectiveDigitsGre
 				break
 			}
 		}
-		r = p.Round(int32(e + effectiveDigits))
+		roundPlaces = int32(e + effectiveDigits)
 	}
+	if isBuy {
+		r = p.RoundFloor(roundPlaces)
+	} else {
+		r = p.RoundCeil(roundPlaces)
+	}
+
 	return
 }
 
