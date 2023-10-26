@@ -13,6 +13,9 @@ const (
 
 	OrderTypeLimit  = "LIMIT"
 	OrderTypeMarket = "MARKET"
+
+	OrderSideBuy  = "BUY"
+	OrderSideSell = "SELL"
 )
 
 type OrderHeader struct {

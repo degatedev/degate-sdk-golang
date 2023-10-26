@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.6 - 2023-10-25
+### Updated 
+- RoundCeil for sell price, roundFloor for buy price 
+
 ## 1.6.5 - 2023-09-22
 ### Updated 
 - Replace signature with access-token 
