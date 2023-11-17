@@ -118,20 +118,21 @@ type OffChainFee struct {
 }
 
 type GasFees struct {
-	UpdateAccountGasFees      *GasFee `json:"update_account_gas_fees"`
-	WithdrawalGasFees         *GasFee `json:"withdrawal_gas_fees"`
-	TransferGasFees           *GasFee `json:"transfer_gas_fees"`
-	TransferNoIDGasFees       *GasFee `json:"transfer_no_id_gas_fees"`
-	OrderGasFees              *GasFee `json:"order_gas_fees"`
-	AddPairGasFees            *GasFee `json:"add_pair_gas_fees"`
-	MiningGasFees             *GasFee `json:"mining_gas_fees"`
-	OnChainCancelOrderGasFees *GasFee `json:"on_chain_cancel_order_gas_fees"`
-	DepositFeeConfirmGasFees  *GasFee `json:"deposit_fee_confirm_gas_fees"`
-	EthPrice                  string  `json:"eth_price"`
-	GasPrice                  string  `json:"gas_price"`
-	PriorityFee               string  `json:"priority_fee"`
-	EnclaveAddress            string  `json:"enclave_address"`
-	CreateTime                int64   `json:"create_time"`
+	UpdateAccountGasFees       *GasFee `json:"update_account_gas_fees"`
+	WithdrawalGasFees          *GasFee `json:"withdrawal_gas_fees"`
+	EstimatedWithdrawalGasFees *GasFee `json:"estimated_withdrawal_gas_fees"`
+	TransferGasFees            *GasFee `json:"transfer_gas_fees"`
+	TransferNoIDGasFees        *GasFee `json:"transfer_no_id_gas_fees"`
+	OrderGasFees               *GasFee `json:"order_gas_fees"`
+	AddPairGasFees             *GasFee `json:"add_pair_gas_fees"`
+	MiningGasFees              *GasFee `json:"mining_gas_fees"`
+	OnChainCancelOrderGasFees  *GasFee `json:"on_chain_cancel_order_gas_fees"`
+	DepositFeeConfirmGasFees   *GasFee `json:"deposit_fee_confirm_gas_fees"`
+	EthPrice                   string  `json:"eth_price"`
+	GasPrice                   string  `json:"gas_price"`
+	PriorityFee                string  `json:"priority_fee"`
+	EnclaveAddress             string  `json:"enclave_address"`
+	CreateTime                 int64   `json:"create_time"`
 }
 
 func (g *GasFees) GetTokenIds() (ids map[uint64]uint64) {
@@ -143,6 +144,11 @@ func (g *GasFees) GetTokenIds() (ids map[uint64]uint64) {
 	}
 	if g.WithdrawalGasFees != nil {
 		for _, token := range g.WithdrawalGasFees.Tokens {
+			ids[token.TokenID] = token.TokenID
+		}
+	}
+	if g.EstimatedWithdrawalGasFees != nil {
+		for _, token := range g.EstimatedWithdrawalGasFees.Tokens {
 			ids[token.TokenID] = token.TokenID
 		}
 	}

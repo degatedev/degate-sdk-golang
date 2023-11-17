@@ -595,7 +595,8 @@ func (c *Client) Withdraw(param *model.WithdrawParam) (response *binance.Withdra
 	}
 	volume = quantity.String()
 
-	gasResponse, err := c.GetGasFee()
+	//获取 gas fee
+	gasResponse, err := c.GetEstimatedWithdrawalGasFee(param.Address, tokenData.TokenID)
 	if err != nil {
 		return
 	}
@@ -604,7 +605,7 @@ func (c *Client) Withdraw(param *model.WithdrawParam) (response *binance.Withdra
 		return
 	}
 
-	gasFees = gasResponse.Data.WithdrawalGasFees
+	gasFees = gasResponse.Data.EstimatedWithdrawalGasFees
 
 	if len(gasFees) == 0 {
 		err = fmt.Errorf("not find gas fee token")

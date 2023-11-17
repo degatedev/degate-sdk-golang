@@ -3,9 +3,10 @@ package spot
 import (
 	"errors"
 	"fmt"
+	"strconv"
+
 	"github.com/degatedev/degate-sdk-golang/conf"
 	"github.com/degatedev/degate-sdk-golang/degate/request"
-	"strconv"
 
 	"github.com/degatedev/degate-sdk-golang/degate/binance"
 	"github.com/degatedev/degate-sdk-golang/degate/lib"
@@ -30,6 +31,55 @@ func (c *Client) GasFee() (response *binance.GasFeeTokenResponse, err error) {
 func (c *Client) GetGasFee() (response *binance.GasFeeResponse, err error) {
 	res := &model.GasFeeResponse{}
 	err = c.Get("user/gasFee", nil, nil, res)
+	if err != nil {
+		return
+	}
+	response = &binance.GasFeeResponse{}
+	if err = model.Copy(response, &res.Response); err != nil {
+		return
+	}
+	if res.Success() && res.Data != nil {
+		var tokensInfo []*model.TokenInfo
+		ids := res.Data.GetTokenIds()
+		if len(ids) > 0 {
+			var (
+				idString string
+				tokenRes *model.TokensResponse
+			)
+			for id := range ids {
+				idString += strconv.Itoa(int(id)) + ","
+			}
+			idString = idString[0 : len(idString)-1]
+			tokenRes, err = c.TokenList(&model.TokenListParam{
+				Ids: idString,
+			})
+			if err != nil {
+				return
+			}
+			if !tokenRes.Success() || len(tokenRes.Data) == 0 {
+				err = errors.New("not find tokens")
+				return
+			}
+			tokensInfo = tokenRes.Data
+		}
+		response.Data, _ = lib.ConvertGasFees(res.Data, tokensInfo)
+	}
+	return
+}
+
+func (c *Client) GetEstimatedWithdrawalGasFee(toAddr string, tokenId uint64) (response *binance.GasFeeResponse, err error) {
+	header, err := c.GetHeaderSign()
+	if err != nil {
+		return
+	}
+
+	r := &model.WithdrawalGasParam{
+		To:      toAddr,
+		TokenId: tokenId,
+	}
+
+	res := &model.GasFeeResponse{}
+	err = c.Get("user/getEstimatedWithdrawalGas", header, r, res)
 	if err != nil {
 		return
 	}

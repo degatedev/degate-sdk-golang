@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.7 - 2023-11-17
+### Updated 
+- Imporve stardard withdrawal
+
 ## 1.6.6 - 2023-10-25
 ### Updated 
 - RoundCeil for sell price, roundFloor for buy price 

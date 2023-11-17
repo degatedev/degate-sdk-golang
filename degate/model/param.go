@@ -135,3 +135,8 @@ type Token struct {
 type DGPairPriceParam struct {
 	Pairs string `json:"pairs"`
 }
+
+type WithdrawalGasParam struct {
+	To      string `json:"to" form:"to" `            // account address
+	TokenId uint64 `json:"token_id" form:"token_id"` // token id
+}

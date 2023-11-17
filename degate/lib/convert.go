@@ -876,6 +876,8 @@ func ConvertGasFees(fees *model.GasFees, tokens []*model.TokenInfo) (offChainFee
 
 	offChainFee.WithdrawalGasFees, err = ConvertGasFee(fees.WithdrawalGasFees, tokens)
 
+	offChainFee.EstimatedWithdrawalGasFees, err = ConvertGasFee(fees.EstimatedWithdrawalGasFees, tokens)
+
 	offChainFee.TransferGasFees, err = ConvertGasFee(fees.TransferGasFees, tokens)
 
 	offChainFee.TransferNoIDGasFees, err = ConvertGasFee(fees.TransferNoIDGasFees, tokens)

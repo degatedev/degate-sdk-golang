@@ -282,3 +282,16 @@ func TestGetOpenOrders(t *testing.T) {
 		t.Logf("%v", lib.String(r))
 	}
 }
+
+func TestGetEstimatedWithdrawalGasFees(t *testing.T) {
+	client := new(spot.Client)
+	client.SetAppConfig(appConfig)
+	response, err := client.GetEstimatedWithdrawalGasFee(appConfig.AccountAddress, 0)
+	if err != nil {
+		t.Errorf("%v", err)
+	} else if response.Success() {
+		t.Logf("%v", lib.String(response.Data))
+	} else {
+		t.Logf("%v", lib.String(response))
+	}
+}

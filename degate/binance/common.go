@@ -40,15 +40,16 @@ type GasFeeResponse struct {
 }
 
 type OffChainFee struct {
-	UpdateAccountGasFees      []*GasFee `json:"update_account_gas_fees"`
-	WithdrawalGasFees         []*GasFee `json:"withdrawal_gas_fees"`
-	TransferGasFees           []*GasFee `json:"transfer_gas_fees"`
-	TransferNoIDGasFees       []*GasFee `json:"transfer_no_id_gas_fees"`
-	OrderGasFees              []*GasFee `json:"order_gas_fees"`
-	AddPairGasFees            []*GasFee `json:"add_pair_gas_fees"`
-	MiningGasFees             []*GasFee `json:"mining_gas_fees"`
-	OnChainCancelOrderGasFees []*GasFee `json:"on_chain_cancel_order_gas_fees"`
-	OrderGasMultiple          uint32    `json:"order_gas_multiple"`
+	UpdateAccountGasFees       []*GasFee `json:"update_account_gas_fees"`
+	WithdrawalGasFees          []*GasFee `json:"withdrawal_gas_fees"`
+	EstimatedWithdrawalGasFees []*GasFee `json:"estimated_withdrawal_gas_fees"`
+	TransferGasFees            []*GasFee `json:"transfer_gas_fees"`
+	TransferNoIDGasFees        []*GasFee `json:"transfer_no_id_gas_fees"`
+	OrderGasFees               []*GasFee `json:"order_gas_fees"`
+	AddPairGasFees             []*GasFee `json:"add_pair_gas_fees"`
+	MiningGasFees              []*GasFee `json:"mining_gas_fees"`
+	OnChainCancelOrderGasFees  []*GasFee `json:"on_chain_cancel_order_gas_fees"`
+	OrderGasMultiple           uint32    `json:"order_gas_multiple"`
 }
 
 type GasFee struct {
