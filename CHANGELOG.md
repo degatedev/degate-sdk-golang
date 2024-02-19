@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.6.8 - 2024-02-19
+### Updated 
+- Parse deposit status 
+
 ## 1.6.7 - 2023-11-17
 ### Updated 
-- Imporve stardard withdrawal
+- Improve stardard withdrawal
 
 ## 1.6.6 - 2023-10-25
 ### Updated 

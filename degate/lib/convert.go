@@ -174,6 +174,12 @@ func ConvertDeposit(w *model.DepositData) (deposit *binance.DepositHistory, err 
 		deposit.Status = 6
 	} else if strings.EqualFold(w.Status, "COMPLETED") {
 		deposit.Status = 1
+	} else if strings.EqualFold(w.Status, "SUCCESS") {
+		deposit.Status = 2
+	} else if strings.EqualFold(w.Status, "FAILED") {
+		deposit.Status = 3
+	} else if strings.EqualFold(w.Status, "CANCELED") {
+		deposit.Status = 4
 	}
 	if w.Token != nil {
 		deposit.Coin = w.Token.Symbol
