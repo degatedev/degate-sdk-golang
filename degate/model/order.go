@@ -125,49 +125,33 @@ type OrdersParamWithTokenId struct {
 	Limit     int64
 }
 
-type ShowTokenData struct {
-	TokenID         uint64 `json:"token_id"`
-	Chain           string `json:"chain"`
-	Code            string `json:"code"`
-	Symbol          string `json:"symbol"`
-	Decimals        int32  `json:"decimals"`
-	Volume          string `json:"volume"`
-	ShowDecimals    int32  `json:"show_decimals"`
-	IsQuotableToken bool   `json:"is_quotable_token"`
-	IsGasToken      bool   `json:"is_gas_token"`
-	IsListToken     bool   `json:"is_list_token"`
-	Active          bool   `json:"active"`
-	IsTrustedToken  bool   `json:"is_trusted_token"`
-	Priority        uint64 `json:"priority"`
-}
-
 type OrderList struct {
-	ID                      uint64         `json:"id"`
-	StorageID               uint32         `json:"storage_id"`
-	OrderID                 string         `json:"order_id"`
-	ClientOrderId           string         `json:"client_order_id"`
-	AccountID               uint64         `json:"account_id"`
-	PairID                  uint64         `json:"pair_id"`
-	SellToken               *ShowTokenData `json:"sell_token"`
-	BuyToken                *ShowTokenData `json:"buy_token"`
-	GasFeeToken             *ShowTokenData `json:"gas_fee_token"`
-	FeeToken                *ShowTokenData `json:"fee_token"`
-	MaxFeeBips              int            `json:"max_fee_bips"`
-	FilledSellTokenVolume   string         `json:"filled_sell_token_volume"`
-	FilledGasFeeTokenVolume string         `json:"filled_gas_fee_token_volume"`
-	FilledBuyTokenVolume    string         `json:"filled_buy_token_volume"`
-	FilledFeeTokenVolume    string         `json:"filled_fee_token_volume"`
-	Status                  string         `json:"status"`
-	IsSystemInvolved        bool           `json:"is_system_involved"`
-	FillAmountBOrs          bool           `json:"fill_amount_bors"`
-	ValidUntil              int64          `json:"valid_until"`
-	OrderType               int64          `json:"order_type"`
-	IsBuy                   bool           `json:"is_buy"`
-	Price                   string         `json:"price"`
-	CloseTime               int64          `json:"close_time"`
-	CreateTime              int64          `json:"create_time"`
-	UpdateTime              int64          `json:"update_time"`
-	GasFee                  string         `json:"gas_fee"`
+	ID                      uint64                 `json:"id"`
+	StorageID               uint32                 `json:"storage_id"`
+	OrderID                 string                 `json:"order_id"`
+	ClientOrderId           string                 `json:"client_order_id"`
+	AccountID               uint64                 `json:"account_id"`
+	PairID                  uint64                 `json:"pair_id"`
+	SellToken               *binance.ShowTokenData `json:"sell_token"`
+	BuyToken                *binance.ShowTokenData `json:"buy_token"`
+	GasFeeToken             *binance.ShowTokenData `json:"gas_fee_token"`
+	FeeToken                *binance.ShowTokenData `json:"fee_token"`
+	MaxFeeBips              int                    `json:"max_fee_bips"`
+	FilledSellTokenVolume   string                 `json:"filled_sell_token_volume"`
+	FilledGasFeeTokenVolume string                 `json:"filled_gas_fee_token_volume"`
+	FilledBuyTokenVolume    string                 `json:"filled_buy_token_volume"`
+	FilledFeeTokenVolume    string                 `json:"filled_fee_token_volume"`
+	Status                  string                 `json:"status"`
+	IsSystemInvolved        bool                   `json:"is_system_involved"`
+	FillAmountBOrs          bool                   `json:"fill_amount_bors"`
+	ValidUntil              int64                  `json:"valid_until"`
+	OrderType               int64                  `json:"order_type"`
+	IsBuy                   bool                   `json:"is_buy"`
+	Price                   string                 `json:"price"`
+	CloseTime               int64                  `json:"close_time"`
+	CreateTime              int64                  `json:"create_time"`
+	UpdateTime              int64                  `json:"update_time"`
+	GasFee                  string                 `json:"gas_fee"`
 }
 
 func (o *OrderList) GetSymbol() string {

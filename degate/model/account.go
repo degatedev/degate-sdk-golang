@@ -176,10 +176,10 @@ type TradesResponse struct {
 }
 
 type TradeFee struct {
-	MakerCommission string         `json:"maker_commission"`
-	TakerCommission string         `json:"taker_commission"`
-	BaseToken       *ShowTokenData `json:"base_token"`
-	QuoteToken      *ShowTokenData `json:"quote_token"`
+	MakerCommission string                 `json:"maker_commission"`
+	TakerCommission string                 `json:"taker_commission"`
+	BaseToken       *binance.ShowTokenData `json:"base_token"`
+	QuoteToken      *binance.ShowTokenData `json:"quote_token"`
 }
 
 type TradeFeeResponse struct {

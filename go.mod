@@ -3,6 +3,7 @@ module github.com/degatedev/degate-sdk-golang
 go 1.18
 
 require (
+	github.com/BurntSushi/toml v0.3.1
 	github.com/bitly/go-simplejson v0.5.0
 	github.com/btcsuite/btcd v0.22.0-beta
 	github.com/dchest/blake512 v1.0.0

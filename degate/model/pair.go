@@ -8,8 +8,8 @@ type PairInfoResponse struct {
 }
 
 type PairInfo struct {
-	PairID     uint64         `json:"pair_id"`
-	BaseToken  *ShowTokenData `json:"base_token"`
-	QuoteToken *ShowTokenData `json:"quote_token"`
-	IsStable   bool           `json:"is_stable"`
+	PairID     uint64                 `json:"pair_id"`
+	BaseToken  *binance.ShowTokenData `json:"base_token"`
+	QuoteToken *binance.ShowTokenData `json:"quote_token"`
+	IsStable   bool                   `json:"is_stable"`
 }

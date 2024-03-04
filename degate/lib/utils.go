@@ -2,11 +2,11 @@ package lib
 
 import (
 	"encoding/json"
+	"github.com/degatedev/degate-sdk-golang/degate/binance"
 	"math/big"
 	"strings"
 	"time"
 
-	"github.com/degatedev/degate-sdk-golang/degate/model"
 	"github.com/degatedev/degate-sdk-golang/log"
 	"github.com/shopspring/decimal"
 )
@@ -41,7 +41,7 @@ func FormatTime(t int64) string {
 	return time.Unix(t, 0).Format(timeFormat)
 }
 
-func GetSymbol(buyToken *model.ShowTokenData, sellToken *model.ShowTokenData, isBuy bool) (symbol string) {
+func GetSymbol(buyToken *binance.ShowTokenData, sellToken *binance.ShowTokenData, isBuy bool) (symbol string) {
 	if buyToken == nil || sellToken == nil {
 		return
 	}

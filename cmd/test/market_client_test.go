@@ -123,7 +123,7 @@ func TestTicker24(t *testing.T) {
 		Symbol: "ETH",
 	})
 	conf.Conf.AddToken(&model.TokenInfo{
-		Id:     2,
+		Id:     9,
 		Symbol: "USDC",
 	})
 	client := new(spot.Client)

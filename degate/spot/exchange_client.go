@@ -167,7 +167,7 @@ func (c *Client) TokenList(param *model.TokenListParam) (response *model.TokensR
 	return
 }
 
-func (c *Client) GetTokenData(tokenId uint64) (tokenData *model.ShowTokenData, err error) {
+func (c *Client) GetTokenData(tokenId uint64) (tokenData *binance.ShowTokenData, err error) {
 	response := &model.TokensResponse{}
 	param := model.TokenListParam{Ids: fmt.Sprint(tokenId)}
 	err = c.Get("exchange/tokenList", nil, param, response)

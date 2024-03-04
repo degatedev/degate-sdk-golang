@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.9 - 2024-03-04
+### Updated 
+- Add minStepSize/maxSize in ShowTokenData struct 
+- Return baseToken/quoteToken for ticker and pair endpoints
+
 ## 1.6.8 - 2024-02-19
 ### Updated 
 - Parse deposit status 

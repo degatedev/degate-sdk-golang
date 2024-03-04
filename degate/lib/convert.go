@@ -386,6 +386,8 @@ func ConvertTicker(t *model.Ticker) (ticker *binance.Ticker) {
 	ticker.MakerFee = t.MakerFee
 	ticker.TakerFee = t.TakerFee
 	ticker.PairId = t.PairId
+	ticker.BaseToken = t.BaseToken
+	ticker.QuoteToken = t.QuoteToken
 	return
 }
 
@@ -955,8 +957,8 @@ func ConvertTradeFee(fees []*model.TradeFee) (tradeFees []*binance.TradeFee) {
 	return
 }
 
-func ConvertTokenInfoToTokenData(info *model.TokenInfo) *model.ShowTokenData {
-	data := &model.ShowTokenData{
+func ConvertTokenInfoToTokenData(info *model.TokenInfo) *binance.ShowTokenData {
+	data := &binance.ShowTokenData{
 		TokenID:         uint64(info.Id),
 		Chain:           info.Chain,
 		Code:            info.Code,

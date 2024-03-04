@@ -351,7 +351,7 @@ func (c *Client) Transfer(param *model.TransferParam) (response *binance.Transfe
 		gasFeeSymbol string
 		gasFee       *binance.GasFee
 		gasFees      []*binance.GasFee
-		tokenData    *model.ShowTokenData
+		tokenData    *binance.ShowTokenData
 		quantity     decimal.Decimal
 		volume       string
 		feeTokenId   uint32
@@ -532,7 +532,7 @@ func (c *Client) Withdraw(param *model.WithdrawParam) (response *binance.Withdra
 		gasFeeSymbol string
 		gasFee       *binance.GasFee
 		gasFees      []*binance.GasFee
-		tokenData    *model.ShowTokenData
+		tokenData    *binance.ShowTokenData
 		quantity     decimal.Decimal
 		volume       string
 		feeTokenId   uint32

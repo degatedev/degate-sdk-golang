@@ -117,8 +117,8 @@ func TestPairInfo(t *testing.T) {
 	c := new(spot.Client)
 	c.SetAppConfig(appConfig)
 	r, err := c.GetPair(&request.PairInfoRequest{
-		Token1: 3,
-		Token2: 5,
+		Token1: 0,
+		Token2: 9,
 	})
 	if err != nil {
 		t.Errorf("%v", err)
