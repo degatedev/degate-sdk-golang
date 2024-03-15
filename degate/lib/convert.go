@@ -432,7 +432,7 @@ func ConvertOrderUpdate(symbol string, orderType string, side string, quoteToken
 		buyFillVolume  = decimal.NewFromInt(0)
 		tokens         = map[uint32]*model.TokenInfo{
 			uint32(quoteToken.Id): quoteToken,
-			uint32(baseToken.Id):  quoteToken,
+			uint32(baseToken.Id):  baseToken,
 			uint32(feeToken.Id):   quoteToken,
 		}
 	)

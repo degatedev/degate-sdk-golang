@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.0 - 2024-03-15
+### Updated 
+- Fix precision of quantity in newOrder response
+
+
 ## 1.6.9 - 2024-03-04
 ### Updated 
 - Add minStepSize/maxSize in ShowTokenData struct 
